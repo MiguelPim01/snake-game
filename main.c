@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
     pFileMapa = fopen(caminho, "r");
 
     if (!pFileMapa){
-        printf("ERRO na leitura do arquivo\n");
+        printf("ERRO: Problema na leitura do arquivo mapa.txt. %s/mapa.txt\n", argv[1]);
         return 1;
     }
     
@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
     pFileMapaOut = fopen(caminho, "w");
 
     if (!pFileMapaOut){
-        printf("ERRO na leitura do arquivo\n");
+        printf("ERRO: Falha na abertura do arquivo Inicializacao.txt. %s/saida/Incializacao.txt\n", argv[1]);
         return 1;
     }
 
