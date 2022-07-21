@@ -1,6 +1,6 @@
 #include <stdio.h>
-#define LINHA 500
-#define COLUNA 500
+#define LINHA 100
+#define COLUNA 100
 
 typedef struct {
     char direcaoAtual; //Variavel para armazenar a direção que aponta a cabeca da cobra
@@ -23,7 +23,7 @@ typedef struct {
     int colunas; //Numero de colunas das matrizes
 } tMapa;
 
-tMapa LeMapa(FILE *pFile, tMapa mapa);
+tMapa LeMapa(FILE *pFileOut, FILE *pFile, tMapa mapa);
 void PrintaMapa(tMapa mapa);
 
 typedef struct {
@@ -37,41 +37,58 @@ typedef struct {
 
 int main(int argc, char *argv[])
 {
-    FILE *pFileMapa; FILE *pFileMovimentos;
+    FILE *pFileMapa; FILE *pFileMovimentos; //Arquivos de entrada
+    FILE *pFileMapaOut; //Arquivos de saida
     tMapa mapa;
-    char arquivoMapa[100];
+    char caminho[1000];
 
+    /*###### VERIFICAÇÃO DE ERROS NA LEITURA DO ARQUIVO "mapa.txt" ######*/
+    /*###################################################################*/
+    
     if (argc <= 1){
         printf("ERRO: O diretorio de arquivos de configuracao nao foi informado\n");
         return 1;
     }
     
-    sprintf(arquivoMapa, "%s/mapa.txt", argv[1]);
-    pFileMapa = fopen(arquivoMapa, "r");
+    sprintf(caminho, "%s/mapa.txt", argv[1]);
+    pFileMapa = fopen(caminho, "r");
 
     if (!pFileMapa){
         printf("ERRO na leitura do arquivo\n");
         return 1;
     }
     
-    mapa = LeMapa(pFileMapa, mapa);
-    PrintaMapa(mapa);
+    /*###### LEITURA E INICIALIZAÇÃO DO MAPA DO JOGO ######*/
+    /*#####################################################*/
+
+    sprintf(caminho, "%s/saida/Inicializacao.txt", argv[1]);
+    pFileMapaOut = fopen(caminho, "w");
+
+    if (!pFileMapaOut){
+        printf("ERRO na leitura do arquivo\n");
+        return 1;
+    }
+
+    mapa = LeMapa(pFileMapaOut, pFileMapa, mapa);
 
     return 0;
 }
 
-tMapa LeMapa(FILE *pFile, tMapa mapa){
+tMapa LeMapa(FILE *pFileOut, FILE *pFile, tMapa mapa){
     int i, j;
     
-    fscanf(pFile, "%d %d%*[^\n]\n", &mapa.linhas, &mapa.colunas);
+    fscanf(pFile, "%d %d%*c", &mapa.linhas, &mapa.colunas);
     
     for (i = 0; i < mapa.linhas; i++){
         for (j = 0; j < mapa.colunas; j++){
             fscanf(pFile, "%c", &mapa.mapa[i][j]);
+            fprintf(pFileOut, "%c", mapa.mapa[i][j]);
         }
-        fscanf(pFile, "%*[^\n]\n");
+        fprintf(pFileOut, "\n");
+        fscanf(pFile, "%*c");
     }
     fclose(pFile);
+    fclose(pFileOut);
 
     return mapa;
 }
