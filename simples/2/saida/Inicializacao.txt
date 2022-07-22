@@ -8,3 +8,4 @@
 #        ########        #
 # *   $  ########       $#
 ##########################
+A cobra comecara o jogo na linha 6 e coluna 2
