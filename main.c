@@ -13,7 +13,8 @@ typedef struct {
     int pegouDinheiro; //Variavel sera 0 se nao pegou dinheiro e 1 se pegou 
     int colidiuComCorpo; //Variavel sera 0 se nao colidiu com o corpo e 1 se colidiu
     int cobraViva; //Varivel que indica que a cobra esta viva se for 1 e 0 caso contrario
-    int tamanho; //Variavel para indicar o tamanho atual da cobra                           
+    int tamanho; //Variavel para indicar o tamanho atual da cobra
+    int pontuacao;                           
 } tCobra;
 
 tCobra InicializaCobra(FILE *pFile, tCobra cobra, int xCabeca, int yCabeca);
@@ -23,6 +24,9 @@ int ObtemPosYParteDoCorpo(tCobra cobra, int parteDoCorpo);
 int ObtemPosXParteDoCorpo(tCobra cobra, int parteDoCorpo);
 char ObtemDirecaoAtualCobra(tCobra cobra);
 int TamanhoCobra(tCobra cobra);
+int ObtemPontuacaoDaCobra(tCobra cobra);
+tCobra AumentaPontuacaoComida(tCobra cobra);
+tCobra AumentaPontuacaoDinheiro(tCobra cobra);
 
 typedef struct {
     tCobra cobra;
@@ -118,15 +122,14 @@ int main(int argc, char *argv[])
         fscanf(pFileMovimentos, "%*[^\n]");
         fscanf(pFileMovimentos, "%*c");
 
+        //Move a cobra no mapa do jogo
         mapa = MoveCobraNoMapa(mapa, mov);
         
+        //Printa o estado atual do mapa no arquivo "saida.txt"
         FilePrintaMapaNaSaida(pFileSaida, mapa, mov);
 
+        //Atualiza o mapa de calor, somando 1 a posicao da cabeca da cobra
         mapa = AtualizaMapaDeCalor(mapa);
-
-        //estatisticas = AtualizaEstatisticas();
-
-        //FilePrintaResumo();
     }
     fclose(pFileSaida);
     fclose(pFileMovimentos);
@@ -146,6 +149,7 @@ tCobra InicializaCobra(FILE *pFile, tCobra cobra, int xCabeca, int yCabeca){
     cobra.cobraViva = 1;
     cobra.pegouDinheiro = 0;
     cobra.tamanho = 1;
+    cobra.pontuacao = 0;
 
     cobra.PosCorpo[0][0] = xCabeca;
     cobra.PosCorpo[0][1] = yCabeca;
@@ -344,6 +348,20 @@ int ObtemPosYCabeca(tCobra cobra){
     return cobra.PosCorpo[0][1];
 }
 
+int ObtemPontuacaoDaCobra(tCobra cobra){
+    return cobra.pontuacao;
+}
+
+tCobra AumentaPontuacaoComida(tCobra cobra){
+    cobra.pontuacao++;
+    return cobra;
+}
+
+tCobra AumentaPontuacaoDinheiro(tCobra cobra){
+    cobra.pontuacao += 10;
+    return cobra;
+}
+
 /* FUNCOES DO TIPO tMapa */
 
 tMapa LeMapaEInicializa(FILE *pFileOut, FILE *pFile, tMapa mapa){
@@ -432,21 +450,37 @@ tMapa MoveCobraNoMapa(tMapa mapa, char mov){
         case 1:
             if (mapa.mapa[ObtemPosYCabeca(mapa.cobra)][ObtemPosXCabeca(mapa.cobra)+1] == '*'){
                 mapa.cobra = AumentaTamanhoCobra(mapa.cobra);
+                mapa.cobra = AumentaPontuacaoComida(mapa.cobra);
+            }
+            if (mapa.mapa[ObtemPosYCabeca(mapa.cobra)][ObtemPosXCabeca(mapa.cobra)+1] == '$'){
+                mapa.cobra = AumentaPontuacaoDinheiro(mapa.cobra);
             }
             break;
         case 2:
             if (mapa.mapa[ObtemPosYCabeca(mapa.cobra)-1][ObtemPosXCabeca(mapa.cobra)] == '*'){
                 mapa.cobra = AumentaTamanhoCobra(mapa.cobra);
+                mapa.cobra = AumentaPontuacaoComida(mapa.cobra);
+            }
+            if (mapa.mapa[ObtemPosYCabeca(mapa.cobra)-1][ObtemPosXCabeca(mapa.cobra)] == '$'){
+                mapa.cobra = AumentaPontuacaoDinheiro(mapa.cobra);
             }
             break;
         case 3:
             if (mapa.mapa[ObtemPosYCabeca(mapa.cobra)][ObtemPosXCabeca(mapa.cobra)-1] == '*'){
                 mapa.cobra = AumentaTamanhoCobra(mapa.cobra);
+                mapa.cobra = AumentaPontuacaoComida(mapa.cobra);
+            }
+            if (mapa.mapa[ObtemPosYCabeca(mapa.cobra)][ObtemPosXCabeca(mapa.cobra)-1] == '$'){
+                mapa.cobra = AumentaPontuacaoDinheiro(mapa.cobra);
             }
             break;
         case 4:
             if (mapa.mapa[ObtemPosYCabeca(mapa.cobra)+1][ObtemPosXCabeca(mapa.cobra)] == '*'){
                 mapa.cobra = AumentaTamanhoCobra(mapa.cobra);
+                mapa.cobra = AumentaPontuacaoComida(mapa.cobra);
+            }
+            if (mapa.mapa[ObtemPosYCabeca(mapa.cobra)+1][ObtemPosXCabeca(mapa.cobra)] == '$'){
+                mapa.cobra = AumentaPontuacaoDinheiro(mapa.cobra);
             }
             break;
     }
@@ -502,6 +536,7 @@ void FilePrintaMapaNaSaida(FILE *pFile, tMapa mapa, char mov){
         }
         fprintf(pFile, "\n");
     }
+    fprintf(pFile, "Pontuacao: %d\n", ObtemPontuacaoDaCobra(mapa.cobra));
     fprintf(pFile, "\n");
 }
 
