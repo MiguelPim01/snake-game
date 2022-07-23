@@ -1,0 +1,72 @@
+Estado do jogo apos o movimento 'c':
+######
+#    #
+# >* #
+#*  *#
+#   $#
+######
+
+Estado do jogo apos o movimento 'c':
+######
+#    #
+# o> #
+#*  *#
+#   $#
+######
+
+Estado do jogo apos o movimento 'c':
+######
+#    #
+#  o>#
+#*  *#
+#   $#
+######
+
+Estado do jogo apos o movimento 'h':
+######
+#    #
+#  oo#
+#*  V#
+#   $#
+######
+
+Estado do jogo apos o movimento 'c':
+######
+#    #
+#   o#
+#*  o#
+#   V#
+######
+
+Estado do jogo apos o movimento 'h':
+######
+#    #
+#    #
+#*  o#
+#  <o#
+######
+
+Estado do jogo apos o movimento 'h':
+######
+#    #
+#    #
+#* ^ #
+#  oo#
+######
+
+Estado do jogo apos o movimento 'a':
+######
+#    #
+#    #
+#*<o #
+#  o #
+######
+
+Estado do jogo apos o movimento 'c':
+######
+#    #
+#    #
+#<oo #
+#  o #
+######
+

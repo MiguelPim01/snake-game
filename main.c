@@ -35,12 +35,13 @@ typedef struct {
 tMapa LeMapaEInicializa(FILE *pFileOut, FILE *pFile, tMapa mapa);
 tMapa InicializaMapaDeCalor(tMapa mapa);
 void PrintaEstadoDoMapa(tMapa mapa);
-int ObtemPosXCabeca(tMapa mapa);
-int ObtemPosYCabeca(tMapa mapa);
+int ObtemPosXCabecaInicial(tMapa mapa);
+int ObtemPosYCabecaInicial(tMapa mapa);
 tMapa MoveCobraNoMapa(tMapa mapa, char mov);
 tMapa RefrescaMapa(tMapa mapa);
 tMapa PrintaCobraNoMapa(tMapa mapa);
 tMapa AtualizaMapaDeCalor(tMapa mapa);
+void FilePrintaMapaNaSaida(FILE *pFile, tMapa mapa, char mov);
 
 typedef struct {
     int qtdMovimentos;             /*### Struct que ira armazenar todas as estatisticas da partida ###*/
@@ -54,7 +55,8 @@ typedef struct {
 int main(int argc, char *argv[])
 {
     FILE *pFileMapa; FILE *pFileMovimentos; //Arquivos de entrada
-    FILE *pFileMapaOut; FILE *pFileResumo;//Arquivos de saida
+    FILE *pFileMapaOut; FILE *pFileResumo; FILE *pFileSaida; FILE *pFileRanking; //Arquivos de saida (linha 1) 
+    FILE *pFileEstatisticas; FILE *pFileHeatMap; //Arquivos de saida (linha 2)
     tMapa mapa;
     char caminho[1000];
 
@@ -102,6 +104,12 @@ int main(int argc, char *argv[])
         printf("ERRO: Falha na abertura do arquivo resumo.txt. %s/saida/resumo.txt\n", argv[1]);
         return 1;
     }
+    sprintf(caminho, "%s/saida/saida.txt", argv[1]);
+    pFileSaida = fopen(caminho, "w");
+    if (!pFileSaida){
+        printf("ERRO: Falha na abertura do arquivo saida.txt. %s/saida/saida.txt\n", argv[1]);
+        return 1;
+    }
 
     //Leitura dos movimentos e realizacao do jogo
     char mov;
@@ -111,14 +119,16 @@ int main(int argc, char *argv[])
         fscanf(pFileMovimentos, "%*c");
 
         mapa = MoveCobraNoMapa(mapa, mov);
-        PrintaEstadoDoMapa(mapa);
-        printf("\n");
+        
+        FilePrintaMapaNaSaida(pFileSaida, mapa, mov);
+
         mapa = AtualizaMapaDeCalor(mapa);
 
         //estatisticas = AtualizaEstatisticas();
 
         //FilePrintaResumo();
     }
+    fclose(pFileSaida);
     fclose(pFileMovimentos);
     fclose(pFileResumo);
 
@@ -140,7 +150,7 @@ tCobra InicializaCobra(FILE *pFile, tCobra cobra, int xCabeca, int yCabeca){
     cobra.PosCorpo[0][0] = xCabeca;
     cobra.PosCorpo[0][1] = yCabeca;
 
-    fprintf(pFile, "A cobra comecara o jogo na linha %d e coluna %d", cobra.PosCorpo[0][1], cobra.PosCorpo[0][0]);
+    fprintf(pFile, "A cobra comecara o jogo na linha %d e coluna %d", cobra.PosCorpo[0][1]+1, cobra.PosCorpo[0][0]+1);
     fclose(pFile);
 
     return cobra;
@@ -321,6 +331,19 @@ int TamanhoCobra(tCobra cobra){
     return cobra.tamanho;
 }
 
+tCobra AumentaTamanhoCobra(tCobra cobra){
+    cobra.tamanho++;
+    return cobra;
+}
+
+int ObtemPosXCabeca(tCobra cobra){
+    return cobra.PosCorpo[0][0];
+}
+
+int ObtemPosYCabeca(tCobra cobra){
+    return cobra.PosCorpo[0][1];
+}
+
 /* FUNCOES DO TIPO tMapa */
 
 tMapa LeMapaEInicializa(FILE *pFileOut, FILE *pFile, tMapa mapa){
@@ -347,7 +370,7 @@ tMapa LeMapaEInicializa(FILE *pFileOut, FILE *pFile, tMapa mapa){
     fclose(pFile);
 
     //Inicializa cobra e fecha arquivo "Inicializacao.txt"
-    mapa.cobra = InicializaCobra(pFileOut, mapa.cobra, ObtemPosXCabeca(mapa), ObtemPosYCabeca(mapa));
+    mapa.cobra = InicializaCobra(pFileOut, mapa.cobra, ObtemPosXCabecaInicial(mapa), ObtemPosYCabecaInicial(mapa));
 
     return mapa;
 }
@@ -380,7 +403,7 @@ void PrintaEstadoDoMapa(tMapa mapa){
     }
 }
 
-int ObtemPosXCabeca(tMapa mapa){
+int ObtemPosXCabecaInicial(tMapa mapa){
     int i, j;
 
     for (i = 0; i < mapa.linhas; i++){
@@ -392,7 +415,7 @@ int ObtemPosXCabeca(tMapa mapa){
     }
 }
 
-int ObtemPosYCabeca(tMapa mapa){
+int ObtemPosYCabecaInicial(tMapa mapa){
     int i, j;
 
     for (i = 0; i < mapa.linhas; i++){
@@ -405,6 +428,29 @@ int ObtemPosYCabeca(tMapa mapa){
 }
 
 tMapa MoveCobraNoMapa(tMapa mapa, char mov){
+    switch (DirecaoDoMovimento(mapa.cobra, mov)){
+        case 1:
+            if (mapa.mapa[ObtemPosYCabeca(mapa.cobra)][ObtemPosXCabeca(mapa.cobra)+1] == '*'){
+                mapa.cobra = AumentaTamanhoCobra(mapa.cobra);
+            }
+            break;
+        case 2:
+            if (mapa.mapa[ObtemPosYCabeca(mapa.cobra)-1][ObtemPosXCabeca(mapa.cobra)] == '*'){
+                mapa.cobra = AumentaTamanhoCobra(mapa.cobra);
+            }
+            break;
+        case 3:
+            if (mapa.mapa[ObtemPosYCabeca(mapa.cobra)][ObtemPosXCabeca(mapa.cobra)-1] == '*'){
+                mapa.cobra = AumentaTamanhoCobra(mapa.cobra);
+            }
+            break;
+        case 4:
+            if (mapa.mapa[ObtemPosYCabeca(mapa.cobra)+1][ObtemPosXCabeca(mapa.cobra)] == '*'){
+                mapa.cobra = AumentaTamanhoCobra(mapa.cobra);
+            }
+            break;
+    }
+    
     mapa.cobra = MoveCobra(mapa.cobra, mov);
 
     mapa = RefrescaMapa(mapa);
@@ -428,7 +474,7 @@ tMapa RefrescaMapa(tMapa mapa){
 }
 
 tMapa PrintaCobraNoMapa(tMapa mapa){
-    int i, j;
+    int i;
 
     for (i = 0; i < TamanhoCobra(mapa.cobra); i++){
         if (!i){
@@ -442,8 +488,21 @@ tMapa PrintaCobraNoMapa(tMapa mapa){
 }
 
 tMapa AtualizaMapaDeCalor(tMapa mapa){
-    mapa.mapaDeCalor[ObtemPosYCabeca(mapa)][ObtemPosXCabeca(mapa)] += 1;
+    mapa.mapaDeCalor[ObtemPosYCabecaInicial(mapa)][ObtemPosXCabecaInicial(mapa)] += 1;
     return mapa;
+}
+
+void FilePrintaMapaNaSaida(FILE *pFile, tMapa mapa, char mov){
+    int i, j;
+
+    fprintf(pFile, "Estado do jogo apos o movimento '%c':\n", mov);
+    for (i = 0; i < mapa.linhas; i++){
+        for (j = 0; j < mapa.colunas; j++){
+            fprintf(pFile, "%c", mapa.mapa[i][j]);
+        }
+        fprintf(pFile, "\n");
+    }
+    fprintf(pFile, "\n");
 }
 
 /* FUNCOES DO TIPO tEstatistica */
