@@ -16,22 +16,31 @@ typedef struct {
     int tamanho; //Variavel para indicar o tamanho atual da cobra                           
 } tCobra;
 
-tCobra InicializaCobra(FILE *pFile, tCobra cobra, tMapa mapa);
+tCobra InicializaCobra(FILE *pFile, tCobra cobra, int xCabeca, int yCabeca);
 tCobra MoveCobra(tCobra cobra, char mov);
 int DirecaoDoMovimento(tCobra cobra, char mov); //Retorna: 1 (direita), 2 (cima), 3 (esquerda) e 4 (baixo)
+int ObtemPosYParteDoCorpo(tCobra cobra, int parteDoCorpo);
+int ObtemPosXParteDoCorpo(tCobra cobra, int parteDoCorpo);
+char ObtemDirecaoAtualCobra(tCobra cobra);
+int TamanhoCobra(tCobra cobra);
 
 typedef struct {
+    tCobra cobra;
     char mapa[LINHA_MAX][COLUNA_MAX]; //Matriz que ira armazenar o mapa do jogo
     int mapaDeCalor[LINHA_MAX][COLUNA_MAX]; //Matriz para armazenar o mapa de calor
     int linhas; //Numero de linhas das matrizes
     int colunas; //Numero de colunas das matrizes
 } tMapa;
 
-tMapa LeMapa(FILE *pFileOut, FILE *pFile, tMapa mapa);
-void InicializaMapaDeCalor(tMapa mapa);
-void PrintaMapa(tMapa mapa);
+tMapa LeMapaEInicializa(FILE *pFileOut, FILE *pFile, tMapa mapa);
+tMapa InicializaMapaDeCalor(tMapa mapa);
+void PrintaEstadoDoMapa(tMapa mapa);
 int ObtemPosXCabeca(tMapa mapa);
 int ObtemPosYCabeca(tMapa mapa);
+tMapa MoveCobraNoMapa(tMapa mapa, char mov);
+tMapa RefrescaMapa(tMapa mapa);
+tMapa PrintaCobraNoMapa(tMapa mapa);
+tMapa AtualizaMapaDeCalor(tMapa mapa);
 
 typedef struct {
     int qtdMovimentos;             /*### Struct que ira armazenar todas as estatisticas da partida ###*/
@@ -47,7 +56,6 @@ int main(int argc, char *argv[])
     FILE *pFileMapa; FILE *pFileMovimentos; //Arquivos de entrada
     FILE *pFileMapaOut; FILE *pFileResumo;//Arquivos de saida
     tMapa mapa;
-    tCobra cobra;
     char caminho[1000];
 
     /*###### VERIFICAÇÃO DE ERROS NA LEITURA DO ARQUIVO "mapa.txt" ######*/
@@ -75,10 +83,8 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    mapa = LeMapa(pFileMapaOut, pFileMapa, mapa);
+    mapa = LeMapaEInicializa(pFileMapaOut, pFileMapa, mapa);
     mapa = InicializaMapaDeCalor(mapa);
-
-    cobra = InicializaCobra(pFileMapaOut, cobra, ObtemPosXCabeca(mapa), ObtemPosYCabeca(mapa));
 
     /*###### REALIZACAO DO JOGO ######*/
 
@@ -97,22 +103,24 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    //Leitura dos movimentos e realizacao do jogo
     char mov;
-    tEstatistica estatisticas;
     while (!feof(pFileMovimentos)){
         fscanf(pFileMovimentos, "%c", &mov); //Obtendo o movimento que a cobra ira realizar
         fscanf(pFileMovimentos, "%*[^\n]");
         fscanf(pFileMovimentos, "%*c");
 
-        cobra = MoveCobra(cobra, mov);
+        mapa = MoveCobraNoMapa(mapa, mov);
+        PrintaEstadoDoMapa(mapa);
+        printf("\n");
+        mapa = AtualizaMapaDeCalor(mapa);
 
-        mapa = AtualizaMapa();
-        mapa = AtualizaMapaDeCalor();
+        //estatisticas = AtualizaEstatisticas();
 
-        estatisticas = AtualizaEstatisticas();
-
-        FilePrintaResumo();
+        //FilePrintaResumo();
     }
+    fclose(pFileMovimentos);
+    fclose(pFileResumo);
 
     return 0;
 }
@@ -129,8 +137,8 @@ tCobra InicializaCobra(FILE *pFile, tCobra cobra, int xCabeca, int yCabeca){
     cobra.pegouDinheiro = 0;
     cobra.tamanho = 1;
 
-    cobra.PosCorpo[0][0] == xCabeca;
-    cobra.PosCorpo[0][1] == yCabeca;
+    cobra.PosCorpo[0][0] = xCabeca;
+    cobra.PosCorpo[0][1] = yCabeca;
 
     fprintf(pFile, "A cobra comecara o jogo na linha %d e coluna %d", cobra.PosCorpo[0][1], cobra.PosCorpo[0][0]);
     fclose(pFile);
@@ -141,7 +149,7 @@ tCobra InicializaCobra(FILE *pFile, tCobra cobra, int xCabeca, int yCabeca){
 tCobra MoveCobra(tCobra cobra, char mov){
     int i, deltaX, deltaY;
     int aux1[2], aux2[2];
-    switch (DirecaoDoMovimento){
+    switch (DirecaoDoMovimento(cobra, mov)){
         //MOVE COBRA PARA DIREITA
         case 1:
             deltaX = 1;
@@ -153,12 +161,12 @@ tCobra MoveCobra(tCobra cobra, char mov){
             cobra.PosCorpo[0][0] += deltaX;
             cobra.PosCorpo[0][1] += deltaY;
             //Move corpo da cobra
-            for (i = 1; i < cobra.tam; i+=2){
+            for (i = 1; i < cobra.tamanho; i+=2){
                 aux2[0] = cobra.PosCorpo[i][0];
                 aux2[1] = cobra.PosCorpo[i][1];
                 cobra.PosCorpo[i][0] = aux1[0];
                 cobra.PosCorpo[i][1] = aux1[1];
-                if (i + 1 == cobra.tam){
+                if (i + 1 == cobra.tamanho){
                     break;
                 }
                 aux1[0] = cobra.PosCorpo[i+1][0];
@@ -178,12 +186,12 @@ tCobra MoveCobra(tCobra cobra, char mov){
             cobra.PosCorpo[0][0] += deltaX;
             cobra.PosCorpo[0][1] += deltaY;
             //Move corpo da cobra
-            for (i = 1; i < cobra.tam; i+=2){
+            for (i = 1; i < cobra.tamanho; i+=2){
                 aux2[0] = cobra.PosCorpo[i][0];
                 aux2[1] = cobra.PosCorpo[i][1];
                 cobra.PosCorpo[i][0] = aux1[0];
                 cobra.PosCorpo[i][1] = aux1[1];
-                if (i + 1 == cobra.tam){
+                if (i + 1 == cobra.tamanho){
                     break;
                 }
                 aux1[0] = cobra.PosCorpo[i+1][0];
@@ -203,12 +211,12 @@ tCobra MoveCobra(tCobra cobra, char mov){
             cobra.PosCorpo[0][0] += deltaX;
             cobra.PosCorpo[0][1] += deltaY;
             //Move corpo da cobra
-            for (i = 1; i < cobra.tam; i+=2){
+            for (i = 1; i < cobra.tamanho; i+=2){
                 aux2[0] = cobra.PosCorpo[i][0];
                 aux2[1] = cobra.PosCorpo[i][1];
                 cobra.PosCorpo[i][0] = aux1[0];
                 cobra.PosCorpo[i][1] = aux1[1];
-                if (i + 1 == cobra.tam){
+                if (i + 1 == cobra.tamanho){
                     break;
                 }
                 aux1[0] = cobra.PosCorpo[i+1][0];
@@ -228,12 +236,12 @@ tCobra MoveCobra(tCobra cobra, char mov){
             cobra.PosCorpo[0][0] += deltaX;
             cobra.PosCorpo[0][1] += deltaY;
             //Move corpo da cobra
-            for (i = 1; i < cobra.tam; i+=2){
+            for (i = 1; i < cobra.tamanho; i+=2){
                 aux2[0] = cobra.PosCorpo[i][0];
                 aux2[1] = cobra.PosCorpo[i][1];
                 cobra.PosCorpo[i][0] = aux1[0];
                 cobra.PosCorpo[i][1] = aux1[1];
-                if (i + 1 == cobra.tam){
+                if (i + 1 == cobra.tamanho){
                     break;
                 }
                 aux1[0] = cobra.PosCorpo[i+1][0];
@@ -251,55 +259,71 @@ int DirecaoDoMovimento(tCobra cobra, char mov){
     switch (cobra.direcaoAtual){
         case '>':
             if (mov == 'c'){
-                return 1;
+                return 1; //Movimento para direita
             }
             else if (mov == 'a'){
-                return 2;
+                return 2; //Movimento para cima
             }
             else if (mov == 'h'){
-                return 4;
+                return 4; //Movimento para baixo
             }
             break;
         case '<':
             if (mov == 'c'){
-                return 3;
+                return 3; //Movimento para esquerda
             }
             else if (mov == 'a'){
-                return 4;
+                return 4; //Movimento para baixo
             }
             else if (mov == 'h'){
-                return 2;
+                return 2; //Movimento para cima
             }
             break;
         case 'V':
             if (mov == 'c'){
-                return 4;
+                return 4; //Movimento para baixo
             }
             else if (mov == 'a'){
-                return 3;
+                return 1; //Movimento para direita
             }
             else if (mov == 'h'){
-                return 1;
+                return 3; //Movimento para esquerda
             }
             break;
         case '^':
             if (mov == 'c'){
-                return 2;
+                return 2; //Movimento para cima
             }
             else if (mov == 'a'){
-                return 3;
+                return 3; //Movimento para esquerda
             }
             else if (mov == 'h'){
-                return 1;
+                return 1; //Movimento para direita
             }
             break;
     }
     printf("ERRO: Movimento invalido\n");
 }
 
+int ObtemPosYParteDoCorpo(tCobra cobra, int parteDoCorpo){
+    return cobra.PosCorpo[parteDoCorpo][1];
+}
+
+int ObtemPosXParteDoCorpo(tCobra cobra, int parteDoCorpo){
+    return cobra.PosCorpo[parteDoCorpo][0];
+}
+
+char ObtemDirecaoAtualCobra(tCobra cobra){
+    return cobra.direcaoAtual;
+}
+
+int TamanhoCobra(tCobra cobra){
+    return cobra.tamanho;
+}
+
 /* FUNCOES DO TIPO tMapa */
 
-tMapa LeMapa(FILE *pFileOut, FILE *pFile, tMapa mapa){
+tMapa LeMapaEInicializa(FILE *pFileOut, FILE *pFile, tMapa mapa){
     int i, j;
     
     //Le as linhas e colunas do mapa
@@ -322,6 +346,9 @@ tMapa LeMapa(FILE *pFileOut, FILE *pFile, tMapa mapa){
     }
     fclose(pFile);
 
+    //Inicializa cobra e fecha arquivo "Inicializacao.txt"
+    mapa.cobra = InicializaCobra(pFileOut, mapa.cobra, ObtemPosXCabeca(mapa), ObtemPosYCabeca(mapa));
+
     return mapa;
 }
 
@@ -342,7 +369,7 @@ tMapa InicializaMapaDeCalor(tMapa mapa){
     return mapa;
 }
 
-void PrintaMapa(tMapa mapa){
+void PrintaEstadoDoMapa(tMapa mapa){
     int i, j;
 
     for (i = 0; i < mapa.linhas; i++){
@@ -375,6 +402,48 @@ int ObtemPosYCabeca(tMapa mapa){
             }
         }
     }
+}
+
+tMapa MoveCobraNoMapa(tMapa mapa, char mov){
+    mapa.cobra = MoveCobra(mapa.cobra, mov);
+
+    mapa = RefrescaMapa(mapa);
+    mapa = PrintaCobraNoMapa(mapa);
+
+    return mapa;
+}
+
+tMapa RefrescaMapa(tMapa mapa){
+    int i, j;
+
+    for (i = 0; i < mapa.linhas; i++){
+        for (j = 0; j < mapa.colunas; j++){
+            if (mapa.mapa[i][j] == '>' || mapa.mapa[i][j] == '<' || mapa.mapa[i][j] == 'V' || mapa.mapa[i][j] == '^' ||
+                mapa.mapa[i][j] == 'o'){
+                    mapa.mapa[i][j] = ' ';
+                }
+        }
+    }
+    return mapa;
+}
+
+tMapa PrintaCobraNoMapa(tMapa mapa){
+    int i, j;
+
+    for (i = 0; i < TamanhoCobra(mapa.cobra); i++){
+        if (!i){
+            mapa.mapa[ObtemPosYParteDoCorpo(mapa.cobra, i)][ObtemPosXParteDoCorpo(mapa.cobra, i)] = ObtemDirecaoAtualCobra(mapa.cobra);
+        }
+        else {
+            mapa.mapa[ObtemPosYParteDoCorpo(mapa.cobra, i)][ObtemPosXParteDoCorpo(mapa.cobra, i)] = 'o';
+        }
+    }
+    return mapa;
+}
+
+tMapa AtualizaMapaDeCalor(tMapa mapa){
+    mapa.mapaDeCalor[ObtemPosYCabeca(mapa)][ObtemPosXCabeca(mapa)] += 1;
+    return mapa;
 }
 
 /* FUNCOES DO TIPO tEstatistica */

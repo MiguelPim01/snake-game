@@ -4,4 +4,4 @@
 #*  *#
 #   $#
 ######
-A cobra comecara o jogo na linha 3 e coluna 2
+A cobra comecara o jogo na linha 2 e coluna 1
