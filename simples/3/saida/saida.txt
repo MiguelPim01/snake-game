@@ -228,7 +228,7 @@ Estado do jogo apos o movimento 'c':
 #      o #
 #  *   o #
 #      o #
-oooooooo  
+oooooooo <
 ######## #
 Pontuacao: 14
 
@@ -241,7 +241,7 @@ Estado do jogo apos o movimento 'c':
 #      o #
 #  *   o #
 #      o #
-oooooooo  
+oooooooo<o
 ######## #
 Pontuacao: 14
 
@@ -250,50 +250,13 @@ Estado do jogo apos o movimento 'c':
 # *      #
 #     *  #
 #        #
-       o  
-#      o #
-#  *   o #
-#      o #
-oooooooo  
+       X  
+#      X #
+#  *   X #
+#      X #
+XXXXXXXXXX
 ######## #
 Pontuacao: 14
 
-Estado do jogo apos o movimento 'c':
-######## #
-# *      #
-#     *  #
-#        #
-          
-#      o #
-#  *   o #
-#      o #
-oooooooo  
-######## #
-Pontuacao: 14
-
-Estado do jogo apos o movimento 'c':
-######## #
-# *      #
-#     *  #
-#        #
-          
-#        #
-#  *   o #
-#      o #
-oooooooo  
-######## #
-Pontuacao: 14
-
-Estado do jogo apos o movimento 'c':
-######## #
-# *      #
-#     *  #
-#        #
-          
-#        #
-#  *     #
-#      o #
-oooooooo  
-######## #
-Pontuacao: 14
-
+Game over!
+Pontuacao final: 14

@@ -18,7 +18,7 @@ typedef struct {
 } tCobra;
 
 tCobra InicializaCobra(FILE *pFile, tCobra cobra, int xCabeca, int yCabeca);
-tCobra MoveCobra(tCobra cobra, char mov);
+tCobra MoveCobra(tCobra cobra, char mov, int linhas, int colunas);
 int DirecaoDoMovimento(tCobra cobra, char mov); //Retorna: 1 (direita), 2 (cima), 3 (esquerda) e 4 (baixo)
 int ObtemPosYParteDoCorpo(tCobra cobra, int parteDoCorpo);
 int ObtemPosXParteDoCorpo(tCobra cobra, int parteDoCorpo);
@@ -27,6 +27,9 @@ int TamanhoCobra(tCobra cobra);
 int ObtemPontuacaoDaCobra(tCobra cobra);
 tCobra AumentaPontuacaoComida(tCobra cobra);
 tCobra AumentaPontuacaoDinheiro(tCobra cobra);
+tCobra MorreCobra(tCobra cobra);
+int CobraEstaViva(tCobra cobra);
+int EhFimDaCobra(tCobra cobra, int x, int y);
 
 typedef struct {
     tCobra cobra;
@@ -46,6 +49,8 @@ tMapa RefrescaMapa(tMapa mapa);
 tMapa PrintaCobraNoMapa(tMapa mapa);
 tMapa AtualizaMapaDeCalor(tMapa mapa);
 void FilePrintaMapaNaSaida(FILE *pFile, tMapa mapa, char mov);
+int EhFimDeJogoCobraMorta(tMapa mapa);
+tCobra ObtemCobra(tMapa mapa);
 
 typedef struct {
     int qtdMovimentos;             /*### Struct que ira armazenar todas as estatisticas da partida ###*/
@@ -130,6 +135,13 @@ int main(int argc, char *argv[])
 
         //Atualiza o mapa de calor, somando 1 a posicao da cabeca da cobra
         mapa = AtualizaMapaDeCalor(mapa);
+
+        if (EhFimDeJogoCobraMorta(mapa)){
+            break;
+        }
+    }
+    if (!EhFimDeJogoCobraMorta(mapa)){
+        fprintf(pFileSaida, "Voce venceu!\nPontuacao final: %d", ObtemPontuacaoDaCobra(ObtemCobra(mapa)));
     }
     fclose(pFileSaida);
     fclose(pFileMovimentos);
@@ -160,7 +172,7 @@ tCobra InicializaCobra(FILE *pFile, tCobra cobra, int xCabeca, int yCabeca){
     return cobra;
 }
 
-tCobra MoveCobra(tCobra cobra, char mov){
+tCobra MoveCobra(tCobra cobra, char mov, int linhas, int colunas){
     int i, deltaX, deltaY;
     int aux1[2], aux2[2];
     switch (DirecaoDoMovimento(cobra, mov)){
@@ -174,6 +186,9 @@ tCobra MoveCobra(tCobra cobra, char mov){
             //Move a cabeca da cobra
             cobra.PosCorpo[0][0] += deltaX;
             cobra.PosCorpo[0][1] += deltaY;
+            if (cobra.PosCorpo[0][0] >= colunas){
+                cobra.PosCorpo[0][0] = 0;
+            }
             //Move corpo da cobra
             for (i = 1; i < cobra.tamanho; i+=2){
                 aux2[0] = cobra.PosCorpo[i][0];
@@ -199,6 +214,9 @@ tCobra MoveCobra(tCobra cobra, char mov){
             //Move a cabeca da cobra
             cobra.PosCorpo[0][0] += deltaX;
             cobra.PosCorpo[0][1] += deltaY;
+            if (cobra.PosCorpo[0][1] < 0){
+                cobra.PosCorpo[0][1] = linhas - 1;
+            }
             //Move corpo da cobra
             for (i = 1; i < cobra.tamanho; i+=2){
                 aux2[0] = cobra.PosCorpo[i][0];
@@ -224,6 +242,9 @@ tCobra MoveCobra(tCobra cobra, char mov){
             //Move a cabeca da cobra
             cobra.PosCorpo[0][0] += deltaX;
             cobra.PosCorpo[0][1] += deltaY;
+            if (cobra.PosCorpo[0][0] < 0){
+                cobra.PosCorpo[0][0] = colunas - 1;
+            }
             //Move corpo da cobra
             for (i = 1; i < cobra.tamanho; i+=2){
                 aux2[0] = cobra.PosCorpo[i][0];
@@ -249,6 +270,9 @@ tCobra MoveCobra(tCobra cobra, char mov){
             //Move a cabeca da cobra
             cobra.PosCorpo[0][0] += deltaX;
             cobra.PosCorpo[0][1] += deltaY;
+            if (cobra.PosCorpo[0][1] >= linhas){
+                cobra.PosCorpo[0][1] = 0;
+            }
             //Move corpo da cobra
             for (i = 1; i < cobra.tamanho; i+=2){
                 aux2[0] = cobra.PosCorpo[i][0];
@@ -362,6 +386,22 @@ tCobra AumentaPontuacaoDinheiro(tCobra cobra){
     return cobra;
 }
 
+tCobra MorreCobra(tCobra cobra){
+    cobra.cobraViva = 0;
+    return cobra;
+}
+
+int CobraEstaViva(tCobra cobra){
+    return cobra.cobraViva;
+}
+
+int EhFimDaCobra(tCobra cobra, int x, int y){
+    if (cobra.PosCorpo[cobra.tamanho-1][0] == x && cobra.PosCorpo[cobra.tamanho-1][1] == y){
+        return 1;
+    }
+    return 0;
+}
+
 /* FUNCOES DO TIPO tMapa */
 
 tMapa LeMapaEInicializa(FILE *pFileOut, FILE *pFile, tMapa mapa){
@@ -446,46 +486,98 @@ int ObtemPosYCabecaInicial(tMapa mapa){
 }
 
 tMapa MoveCobraNoMapa(tMapa mapa, char mov){
+    int xCabeca, yCabeca;
+    xCabeca = ObtemPosXCabeca(mapa.cobra);
+    yCabeca = ObtemPosYCabeca(mapa.cobra);
+    //Verificação de onde a cabeca da cobra estara indo (#, o, *, $) 
     switch (DirecaoDoMovimento(mapa.cobra, mov)){
         case 1:
-            if (mapa.mapa[ObtemPosYCabeca(mapa.cobra)][ObtemPosXCabeca(mapa.cobra)+1] == '*'){
+            //Verifica se colidiu com a parede
+            if (mapa.mapa[yCabeca][xCabeca+1] == '#'){
+                mapa.cobra = MorreCobra(mapa.cobra);
+            }
+            //Verifica se colidiu com o corpo
+            if (mapa.mapa[yCabeca][xCabeca+1] == 'o'){
+                if (!EhFimDaCobra(mapa.cobra, xCabeca+1, yCabeca)){
+                    mapa.cobra = MorreCobra(mapa.cobra);
+                }
+            }
+            //Verifica se comeu comida
+            if (mapa.mapa[yCabeca][xCabeca+1] == '*'){
                 mapa.cobra = AumentaTamanhoCobra(mapa.cobra);
                 mapa.cobra = AumentaPontuacaoComida(mapa.cobra);
             }
-            if (mapa.mapa[ObtemPosYCabeca(mapa.cobra)][ObtemPosXCabeca(mapa.cobra)+1] == '$'){
+            //Verifica se pegou dinheiro
+            if (mapa.mapa[yCabeca][xCabeca+1] == '$'){
                 mapa.cobra = AumentaPontuacaoDinheiro(mapa.cobra);
             }
             break;
         case 2:
-            if (mapa.mapa[ObtemPosYCabeca(mapa.cobra)-1][ObtemPosXCabeca(mapa.cobra)] == '*'){
+            //Verifica se colidiu com a parede
+            if (mapa.mapa[yCabeca-1][xCabeca] == '#'){
+                mapa.cobra = MorreCobra(mapa.cobra);
+            }
+            //Verifica se colidiu com o corpo
+            if (mapa.mapa[yCabeca-1][xCabeca] == 'o'){
+                if (!EhFimDaCobra(mapa.cobra, xCabeca, yCabeca-1)){
+                    mapa.cobra = MorreCobra(mapa.cobra);
+                }
+            }
+            //Verifica se comeu comida
+            if (mapa.mapa[yCabeca-1][xCabeca] == '*'){
                 mapa.cobra = AumentaTamanhoCobra(mapa.cobra);
                 mapa.cobra = AumentaPontuacaoComida(mapa.cobra);
             }
-            if (mapa.mapa[ObtemPosYCabeca(mapa.cobra)-1][ObtemPosXCabeca(mapa.cobra)] == '$'){
+            //Verifica se pegou dinheiro
+            if (mapa.mapa[yCabeca-1][xCabeca] == '$'){
                 mapa.cobra = AumentaPontuacaoDinheiro(mapa.cobra);
             }
             break;
         case 3:
-            if (mapa.mapa[ObtemPosYCabeca(mapa.cobra)][ObtemPosXCabeca(mapa.cobra)-1] == '*'){
+            //Verifica se colidiu com a parede
+            if (mapa.mapa[yCabeca][xCabeca-1] == '#'){
+                mapa.cobra = MorreCobra(mapa.cobra);
+            }
+            //Verifica se colidiu com o corpo
+            if (mapa.mapa[yCabeca][xCabeca-1] == 'o'){
+                if (!EhFimDaCobra(mapa.cobra, xCabeca-1, yCabeca)){
+                    mapa.cobra = MorreCobra(mapa.cobra);
+                }
+            }
+            //Verifica se comeu comida
+            if (mapa.mapa[yCabeca][xCabeca-1] == '*'){
                 mapa.cobra = AumentaTamanhoCobra(mapa.cobra);
                 mapa.cobra = AumentaPontuacaoComida(mapa.cobra);
             }
-            if (mapa.mapa[ObtemPosYCabeca(mapa.cobra)][ObtemPosXCabeca(mapa.cobra)-1] == '$'){
+            //Verifica se pegou dinheiro
+            if (mapa.mapa[yCabeca][xCabeca-1] == '$'){
                 mapa.cobra = AumentaPontuacaoDinheiro(mapa.cobra);
             }
             break;
         case 4:
-            if (mapa.mapa[ObtemPosYCabeca(mapa.cobra)+1][ObtemPosXCabeca(mapa.cobra)] == '*'){
+            //Verifica se colidiu com a parede
+            if (mapa.mapa[yCabeca+1][xCabeca] == '#'){
+                mapa.cobra = MorreCobra(mapa.cobra);
+            }
+            //Verifica se colidiu com o corpo
+            if (mapa.mapa[yCabeca+1][xCabeca] == 'o'){
+                if (!EhFimDaCobra(mapa.cobra, xCabeca, yCabeca+1)){
+                    mapa.cobra = MorreCobra(mapa.cobra);
+                }
+            }
+            //Verifica se comeu comida
+            if (mapa.mapa[yCabeca+1][xCabeca] == '*'){
                 mapa.cobra = AumentaTamanhoCobra(mapa.cobra);
                 mapa.cobra = AumentaPontuacaoComida(mapa.cobra);
             }
-            if (mapa.mapa[ObtemPosYCabeca(mapa.cobra)+1][ObtemPosXCabeca(mapa.cobra)] == '$'){
+            //Verifica se pegou dinheiro
+            if (mapa.mapa[yCabeca+1][xCabeca] == '$'){
                 mapa.cobra = AumentaPontuacaoDinheiro(mapa.cobra);
             }
             break;
     }
     
-    mapa.cobra = MoveCobra(mapa.cobra, mov);
+    mapa.cobra = MoveCobra(mapa.cobra, mov, mapa.linhas, mapa.colunas);
 
     mapa = RefrescaMapa(mapa);
     mapa = PrintaCobraNoMapa(mapa);
@@ -510,12 +602,19 @@ tMapa RefrescaMapa(tMapa mapa){
 tMapa PrintaCobraNoMapa(tMapa mapa){
     int i;
 
-    for (i = 0; i < TamanhoCobra(mapa.cobra); i++){
-        if (!i){
-            mapa.mapa[ObtemPosYParteDoCorpo(mapa.cobra, i)][ObtemPosXParteDoCorpo(mapa.cobra, i)] = ObtemDirecaoAtualCobra(mapa.cobra);
+    if (CobraEstaViva(mapa.cobra)){
+        for (i = 0; i < TamanhoCobra(mapa.cobra); i++){
+            if (!i){
+                mapa.mapa[ObtemPosYParteDoCorpo(mapa.cobra, i)][ObtemPosXParteDoCorpo(mapa.cobra, i)] = ObtemDirecaoAtualCobra(mapa.cobra);
+            }
+            else {
+                mapa.mapa[ObtemPosYParteDoCorpo(mapa.cobra, i)][ObtemPosXParteDoCorpo(mapa.cobra, i)] = 'o';
+            }
         }
-        else {
-            mapa.mapa[ObtemPosYParteDoCorpo(mapa.cobra, i)][ObtemPosXParteDoCorpo(mapa.cobra, i)] = 'o';
+    }
+    else {
+        for (i = 0; i < TamanhoCobra(mapa.cobra); i++){
+            mapa.mapa[ObtemPosYParteDoCorpo(mapa.cobra, i)][ObtemPosXParteDoCorpo(mapa.cobra, i)] = 'X';
         }
     }
     return mapa;
@@ -538,6 +637,20 @@ void FilePrintaMapaNaSaida(FILE *pFile, tMapa mapa, char mov){
     }
     fprintf(pFile, "Pontuacao: %d\n", ObtemPontuacaoDaCobra(mapa.cobra));
     fprintf(pFile, "\n");
+    if (!CobraEstaViva(mapa.cobra)){
+        fprintf(pFile, "Game over!\nPontuacao final: %d", ObtemPontuacaoDaCobra(mapa.cobra));
+    }
+}
+
+int EhFimDeJogoCobraMorta(tMapa mapa){
+    if (CobraEstaViva(mapa.cobra)){
+        return 0;
+    }
+    return 1;
+}
+
+tCobra ObtemCobra(tMapa mapa){
+    return mapa.cobra;
 }
 
 /* FUNCOES DO TIPO tEstatistica */
