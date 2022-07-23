@@ -239,7 +239,7 @@ tCobra MoveCobra(tCobra cobra, char mov){
         case 4:
             deltaX = 0;
             deltaY = 1;
-            cobra.direcaoAtual = 'V';
+            cobra.direcaoAtual = 'v';
             aux1[0] = cobra.PosCorpo[0][0];
             aux1[1] = cobra.PosCorpo[0][1];
             //Move a cabeca da cobra
@@ -289,7 +289,7 @@ int DirecaoDoMovimento(tCobra cobra, char mov){
                 return 2; //Movimento para cima
             }
             break;
-        case 'V':
+        case 'v':
             if (mov == 'c'){
                 return 4; //Movimento para baixo
             }
@@ -408,7 +408,7 @@ int ObtemPosXCabecaInicial(tMapa mapa){
 
     for (i = 0; i < mapa.linhas; i++){
         for (j = 0; j < mapa.colunas; j++){
-            if (mapa.mapa[i][j] == '>' || mapa.mapa[i][j] == '<' || mapa.mapa[i][j] == 'V' || mapa.mapa[i][j] == '^'){
+            if (mapa.mapa[i][j] == '>' || mapa.mapa[i][j] == '<' || mapa.mapa[i][j] == 'v' || mapa.mapa[i][j] == '^'){
                 return j;
             }
         }
@@ -420,7 +420,7 @@ int ObtemPosYCabecaInicial(tMapa mapa){
 
     for (i = 0; i < mapa.linhas; i++){
         for (j = 0; j < mapa.colunas; j++){
-            if (mapa.mapa[i][j] == '>' || mapa.mapa[i][j] == '<' || mapa.mapa[i][j] == 'V' || mapa.mapa[i][j] == '^'){
+            if (mapa.mapa[i][j] == '>' || mapa.mapa[i][j] == '<' || mapa.mapa[i][j] == 'v' || mapa.mapa[i][j] == '^'){
                 return i;
             }
         }
@@ -464,7 +464,7 @@ tMapa RefrescaMapa(tMapa mapa){
 
     for (i = 0; i < mapa.linhas; i++){
         for (j = 0; j < mapa.colunas; j++){
-            if (mapa.mapa[i][j] == '>' || mapa.mapa[i][j] == '<' || mapa.mapa[i][j] == 'V' || mapa.mapa[i][j] == '^' ||
+            if (mapa.mapa[i][j] == '>' || mapa.mapa[i][j] == '<' || mapa.mapa[i][j] == 'v' || mapa.mapa[i][j] == '^' ||
                 mapa.mapa[i][j] == 'o'){
                     mapa.mapa[i][j] = ' ';
                 }

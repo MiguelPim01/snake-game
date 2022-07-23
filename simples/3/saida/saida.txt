@@ -9,6 +9,7 @@ Estado do jogo apos o movimento 'c':
 #      * #
    *****  
 ######## #
+
 Estado do jogo apos o movimento 'c':
 ######## #
 # *      #
@@ -20,6 +21,7 @@ Estado do jogo apos o movimento 'c':
 #      * #
    *****  
 ######## #
+
 Estado do jogo apos o movimento 'c':
 ######## #
 # *      #
@@ -31,6 +33,7 @@ Estado do jogo apos o movimento 'c':
 #      * #
    *****  
 ######## #
+
 Estado do jogo apos o movimento 'c':
 ######## #
 # *      #
@@ -42,6 +45,7 @@ Estado do jogo apos o movimento 'c':
 #      * #
    *****  
 ######## #
+
 Estado do jogo apos o movimento 'c':
 ######## #
 # *      #
@@ -53,6 +57,7 @@ Estado do jogo apos o movimento 'c':
 #      * #
    *****  
 ######## #
+
 Estado do jogo apos o movimento 'c':
 ######## #
 # *      #
@@ -64,17 +69,19 @@ Estado do jogo apos o movimento 'c':
 #      * #
    *****  
 ######## #
+
 Estado do jogo apos o movimento 'h':
 ######## #
 # *      #
 #     *  #
 #        #
  ooooooo  
-#      V #
+#      v #
 #  *   * #
 #      * #
    *****  
 ######## #
+
 Estado do jogo apos o movimento 'c':
 ######## #
 # *      #
@@ -82,10 +89,11 @@ Estado do jogo apos o movimento 'c':
 #        #
  ooooooo  
 #      o #
-#  *   V #
+#  *   v #
 #      * #
    *****  
 ######## #
+
 Estado do jogo apos o movimento 'c':
 ######## #
 # *      #
@@ -94,9 +102,10 @@ Estado do jogo apos o movimento 'c':
  ooooooo  
 #      o #
 #  *   o #
-#      V #
+#      v #
    *****  
 ######## #
+
 Estado do jogo apos o movimento 'c':
 ######## #
 # *      #
@@ -106,8 +115,9 @@ Estado do jogo apos o movimento 'c':
 #      o #
 #  *   o #
 #      o #
-   ****V  
+   ****v  
 ######## #
+
 Estado do jogo apos o movimento 'h':
 ######## #
 # *      #
@@ -119,6 +129,7 @@ Estado do jogo apos o movimento 'h':
 #      o #
    ***<o  
 ######## #
+
 Estado do jogo apos o movimento 'c':
 ######## #
 # *      #
@@ -130,6 +141,7 @@ Estado do jogo apos o movimento 'c':
 #      o #
    **<oo  
 ######## #
+
 Estado do jogo apos o movimento 'c':
 ######## #
 # *      #
@@ -141,6 +153,7 @@ Estado do jogo apos o movimento 'c':
 #      o #
    *<ooo  
 ######## #
+
 Estado do jogo apos o movimento 'c':
 ######## #
 # *      #
@@ -152,6 +165,7 @@ Estado do jogo apos o movimento 'c':
 #      o #
    <oooo  
 ######## #
+
 Estado do jogo apos o movimento 'c':
 ######## #
 # *      #
@@ -163,6 +177,7 @@ Estado do jogo apos o movimento 'c':
 #      o #
   <ooooo  
 ######## #
+
 Estado do jogo apos o movimento 'c':
 ######## #
 # *      #
@@ -174,6 +189,7 @@ Estado do jogo apos o movimento 'c':
 #      o #
  <oooooo  
 ######## #
+
 Estado do jogo apos o movimento 'c':
 ######## #
 # *      #
@@ -185,6 +201,7 @@ Estado do jogo apos o movimento 'c':
 #      o #
 <ooooooo  
 ######## #
+
 Estado do jogo apos o movimento 'c':
 ######## #
 # *      #
@@ -196,6 +213,7 @@ Estado do jogo apos o movimento 'c':
 #      o #
 oooooooo  
 ######## #
+
 Estado do jogo apos o movimento 'c':
 ######## #
 # *      #
@@ -207,6 +225,7 @@ Estado do jogo apos o movimento 'c':
 #      o #
 oooooooo  
 ######## #
+
 Estado do jogo apos o movimento 'c':
 ######## #
 # *      #
@@ -218,6 +237,7 @@ Estado do jogo apos o movimento 'c':
 #      o #
 oooooooo  
 ######## #
+
 Estado do jogo apos o movimento 'c':
 ######## #
 # *      #
@@ -229,6 +249,7 @@ Estado do jogo apos o movimento 'c':
 #      o #
 oooooooo  
 ######## #
+
 Estado do jogo apos o movimento 'c':
 ######## #
 # *      #
@@ -240,6 +261,7 @@ Estado do jogo apos o movimento 'c':
 #      o #
 oooooooo  
 ######## #
+
 Estado do jogo apos o movimento 'c':
 ######## #
 # *      #
@@ -251,3 +273,4 @@ Estado do jogo apos o movimento 'c':
 #      o #
 oooooooo  
 ######## #
+
