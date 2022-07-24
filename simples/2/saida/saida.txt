@@ -1350,18 +1350,5 @@ Estado do jogo apos o movimento 'h':
 ##########################
 Pontuacao: 64
 
-Estado do jogo apos o movimento 'h':
-##########################
-#        ########        #
-#     $  ########        #
-#        ########        #
-#        ########        #
-#                   ooo  #
-#        ########    <o  #
-#        ########        #
-#        ########        #
-##########################
-Pontuacao: 64
-
 Voce venceu!
 Pontuacao final: 64
