@@ -117,6 +117,7 @@ tMapa PrintaCobraNoMapa(tMapa mapa);
 tMapa AtualizaMapaDeCalor(tMapa mapa);
 
 //Printa o mapa no arquivo "saida.txt" a cada movimento feito pela cobra
+//Obs: Tambem tem opcao de printar na saida padrao (basta tirar o comentario dos printfs)
 void FilePrintaMapaNaSaida(FILE *pFile, tMapa mapa, char mov);
 
 //Retorna 1 se a cobra morreu e 0 caso contrario
@@ -819,20 +820,29 @@ tMapa AtualizaMapaDeCalor(tMapa mapa){
 void FilePrintaMapaNaSaida(FILE *pFile, tMapa mapa, char mov){
     int i, j;
 
+    //Funcao tambem tem a opcao de printar na saida padra (basta apenas tirar o comentario dos printfs)
+
     fprintf(pFile, "Estado do jogo apos o movimento '%c':\n", mov);
+    //printf("Estado do jogo apos o movimento '%c':\n", mov);
     for (i = 0; i < mapa.linhas; i++){
         for (j = 0; j < mapa.colunas; j++){
             fprintf(pFile, "%c", mapa.mapa[i][j]);
+            //printf("%c", mapa.mapa[i][j]);
         }
         fprintf(pFile, "\n");
+        //printf("\n");
     }
     fprintf(pFile, "Pontuacao: %d\n", ObtemPontuacaoDaCobra(mapa.cobra));
     fprintf(pFile, "\n");
+    //printf("Pontuacao: %d\n", ObtemPontuacaoDaCobra(mapa.cobra));
+    //printf("\n");
     if (!CobraEstaViva(mapa.cobra)){
         fprintf(pFile, "Game over!\nPontuacao final: %d", ObtemPontuacaoDaCobra(mapa.cobra));
+        //printf("Game over!\nPontuacao final: %d", ObtemPontuacaoDaCobra(mapa.cobra));
     }
     else if (!TemComidaNoMapa(mapa)){
         fprintf(pFile, "Voce venceu!\nPontuacao final: %d", ObtemPontuacaoDaCobra(mapa.cobra));
+        //printf("Voce venceu!\nPontuacao final: %d", ObtemPontuacaoDaCobra(mapa.cobra));
     }
 }
 
