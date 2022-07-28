@@ -137,7 +137,7 @@ void FilePrintaEstatisticas(FILE *pFile, tMapa mapa);
 
 int main(int argc, char *argv[])
 {
-    FILE *pFileMapa; FILE *pFileMovimentos; //Arquivos de entrada
+    FILE *pFileMapa; //Arquivo de entrada
     FILE *pFileMapaOut; FILE *pFileResumo; FILE *pFileSaida; FILE *pFileRanking; //Arquivos de saida (linha 1) 
     FILE *pFileEstatisticas; FILE *pFileHeatMap; //Arquivos de saida (linha 2)
     tMapa mapa;
@@ -175,13 +175,6 @@ int main(int argc, char *argv[])
 
     
     //Abrindo arquivos e verificando erros
-    //MOVIMENTOS:
-    sprintf(caminho, "%s/movimentos.txt", argv[1]);
-    pFileMovimentos = fopen(caminho, "r");
-    if (!pFileMovimentos){
-        printf("ERRO: Falha na leitura do arquivo movimentos.txt. %s/movimentos.txt\n", argv[1]);
-        return 1;
-    }
     //RESUMO:
     sprintf(caminho, "%s/saida/resumo.txt", argv[1]);
     pFileResumo = fopen(caminho, "w");
@@ -196,21 +189,10 @@ int main(int argc, char *argv[])
         printf("ERRO: Falha na abertura do arquivo saida.txt. %s/saida/saida.txt\n", argv[1]);
         return 1;
     }
-    //ESTATISTICAS:
-    sprintf(caminho, "%s/saida/estatisticas.txt", argv[1]);
-    pFileEstatisticas = fopen(caminho, "w");
-    if (!pFileEstatisticas){
-        printf("ERRO: Falha na abertura do arquivo estatisticas.txt. %s/saida/estatisticas.txt\n", argv[1]);
-        return 1;
-    }
 
     //Leitura dos movimentos e realizacao do jogo
     char mov;
-    while (!feof(pFileMovimentos)){
-        //Obtendo o movimento que a cobra ira realizar
-        fscanf(pFileMovimentos, "%c", &mov);
-        fscanf(pFileMovimentos, "%*[^\n]");
-        fscanf(pFileMovimentos, "%*c");
+    while (scanf("%c", &mov) == 1){
 
         //Move a cobra no mapa do jogo
         mapa = MoveCobraNoMapa(pFileResumo, mapa, mov);
@@ -224,9 +206,11 @@ int main(int argc, char *argv[])
         if (EhFimDeJogo(mapa)){
             break;
         }
+
+        scanf("%*[^\n]");
+        scanf("%*c");
     }
     fclose(pFileSaida);
-    fclose(pFileMovimentos);
     fclose(pFileResumo);
 
     //Gerando arquivos finais de saida do programa
@@ -241,6 +225,12 @@ int main(int argc, char *argv[])
     FilePrintaHeatMap(pFileHeatMap, mapa);
 
     //ESTATISTICAS:
+    sprintf(caminho, "%s/saida/estatisticas.txt", argv[1]);
+    pFileEstatisticas = fopen(caminho, "w");
+    if (!pFileEstatisticas){
+        printf("ERRO: Falha na abertura do arquivo estatisticas.txt. %s/saida/estatisticas.txt\n", argv[1]);
+        return 1;
+    }
     FilePrintaEstatisticas(pFileEstatisticas, mapa);
 
     return 0;
@@ -356,21 +346,6 @@ tCobra MoveCobra(tCobra cobra, char mov, int linhas, int colunas){
             if (cobra.PosCorpo[0][0] >= colunas){
                 cobra.PosCorpo[0][0] = 0;
             }
-
-            /* ------ Move corpo da cobra ------ */
-            for (i = 1; i < cobra.tamanho; i+=2){
-                aux2[0] = cobra.PosCorpo[i][0];
-                aux2[1] = cobra.PosCorpo[i][1];
-                cobra.PosCorpo[i][0] = aux1[0];
-                cobra.PosCorpo[i][1] = aux1[1];
-                if (i + 1 == cobra.tamanho){
-                    break;
-                }
-                aux1[0] = cobra.PosCorpo[i+1][0];
-                aux1[1] = cobra.PosCorpo[i+1][1];
-                cobra.PosCorpo[i+1][0] = aux2[0];
-                cobra.PosCorpo[i+1][1] = aux2[1];
-            }
             break;
 
         //MOVE COBRA PARA CIMA
@@ -389,21 +364,6 @@ tCobra MoveCobra(tCobra cobra, char mov, int linhas, int colunas){
             /* ------ Verifica se acabou o mapa ------ */
             if (cobra.PosCorpo[0][1] < 0){
                 cobra.PosCorpo[0][1] = linhas - 1;
-            }
-
-            /* ------ Move corpo da cobra ------ */
-            for (i = 1; i < cobra.tamanho; i+=2){
-                aux2[0] = cobra.PosCorpo[i][0];
-                aux2[1] = cobra.PosCorpo[i][1];
-                cobra.PosCorpo[i][0] = aux1[0];
-                cobra.PosCorpo[i][1] = aux1[1];
-                if (i + 1 == cobra.tamanho){
-                    break;
-                }
-                aux1[0] = cobra.PosCorpo[i+1][0];
-                aux1[1] = cobra.PosCorpo[i+1][1];
-                cobra.PosCorpo[i+1][0] = aux2[0];
-                cobra.PosCorpo[i+1][1] = aux2[1];
             }
             break;
 
@@ -424,21 +384,6 @@ tCobra MoveCobra(tCobra cobra, char mov, int linhas, int colunas){
             if (cobra.PosCorpo[0][0] < 0){
                 cobra.PosCorpo[0][0] = colunas - 1;
             }
-
-            /* ------ Move corpo da cobra ------ */
-            for (i = 1; i < cobra.tamanho; i+=2){
-                aux2[0] = cobra.PosCorpo[i][0];
-                aux2[1] = cobra.PosCorpo[i][1];
-                cobra.PosCorpo[i][0] = aux1[0];
-                cobra.PosCorpo[i][1] = aux1[1];
-                if (i + 1 == cobra.tamanho){
-                    break;
-                }
-                aux1[0] = cobra.PosCorpo[i+1][0];
-                aux1[1] = cobra.PosCorpo[i+1][1];
-                cobra.PosCorpo[i+1][0] = aux2[0];
-                cobra.PosCorpo[i+1][1] = aux2[1];
-            }
             break;
 
         //MOVE COBRA PARA BAIXO
@@ -458,22 +403,22 @@ tCobra MoveCobra(tCobra cobra, char mov, int linhas, int colunas){
             if (cobra.PosCorpo[0][1] >= linhas){
                 cobra.PosCorpo[0][1] = 0;
             }
-
-            /* ------ Move corpo da cobra ------ */
-            for (i = 1; i < cobra.tamanho; i+=2){
-                aux2[0] = cobra.PosCorpo[i][0];
-                aux2[1] = cobra.PosCorpo[i][1];
-                cobra.PosCorpo[i][0] = aux1[0];
-                cobra.PosCorpo[i][1] = aux1[1];
-                if (i + 1 == cobra.tamanho){
-                    break;
-                }
-                aux1[0] = cobra.PosCorpo[i+1][0];
-                aux1[1] = cobra.PosCorpo[i+1][1];
-                cobra.PosCorpo[i+1][0] = aux2[0];
-                cobra.PosCorpo[i+1][1] = aux2[1];
-            }
             break;
+    }
+
+    /* ------ Move corpo da cobra ------ */
+    for (i = 1; i < cobra.tamanho; i+=2){
+        aux2[0] = cobra.PosCorpo[i][0];
+        aux2[1] = cobra.PosCorpo[i][1];
+        cobra.PosCorpo[i][0] = aux1[0];
+        cobra.PosCorpo[i][1] = aux1[1];
+        if (i + 1 == cobra.tamanho){
+            break;
+        }
+        aux1[0] = cobra.PosCorpo[i+1][0];
+        aux1[1] = cobra.PosCorpo[i+1][1];
+        cobra.PosCorpo[i+1][0] = aux2[0];
+        cobra.PosCorpo[i+1][1] = aux2[1];
     }
 
     return cobra;
