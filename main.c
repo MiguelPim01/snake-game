@@ -55,9 +55,6 @@ int ObtemPosXParteDoCorpo(tCobra cobra, int parteDoCorpo);
 //Retorna a variavel "direcaoAtual" do tipo tCobra
 char ObtemDirecaoAtualCobra(tCobra cobra);
 
-//Retorna variavel "tamanho" do tipo tCobra
-int TamanhoCobra(tCobra cobra);
-
 //Retorna variavel "pontuacao" do tipo tCobra
 int ObtemPontuacaoDaCobra(tCobra cobra);
 
@@ -135,6 +132,8 @@ void FilePrintaHeatMap(FILE *pFile, tMapa mapa);
 //Printa estatisticas da cobra no arquivo "estatisticas.txt"
 void FilePrintaEstatisticas(FILE *pFile, tMapa mapa);
 
+//Printa ranking no arquivo "ranking.txt"
+void FilePrintaRanking(FILE *pFile, tMapa mapa);
 
 int main(int argc, char *argv[])
 {
@@ -233,6 +232,15 @@ int main(int argc, char *argv[])
         return 1;
     }
     FilePrintaEstatisticas(pFileEstatisticas, mapa);
+
+    //RANKING:
+    sprintf(caminho, "%s/saida/ranking.txt", argv[1]);
+    pFileRanking = fopen(caminho, "w");
+    if (!pFileRanking){
+        printf("ERRO: Falha na abertura do arquivo ranking.txt. %s/saida/ranking.txt\n", argv[1]);
+        return 1;
+    }
+    FilePrintaRanking(pFileRanking, mapa);
 
     return 0;
 }
@@ -485,10 +493,6 @@ int ObtemPosXParteDoCorpo(tCobra cobra, int parteDoCorpo){
 
 char ObtemDirecaoAtualCobra(tCobra cobra){
     return cobra.direcaoAtual;
-}
-
-int TamanhoCobra(tCobra cobra){
-    return cobra.tamanho;
 }
 
 tCobra AumentaTamanhoCobra(tCobra cobra){
@@ -795,7 +799,7 @@ tMapa PrintaCobraNoMapa(tMapa mapa){
     int i;
 
     if (CobraEstaViva(mapa.cobra)){
-        for (i = 0; i < TamanhoCobra(mapa.cobra); i++){
+        for (i = 0; i < ObtemTamanhoDaCobra(mapa.cobra); i++){
             if (!i){
                 mapa.mapa[ObtemPosYParteDoCorpo(mapa.cobra, i)][ObtemPosXParteDoCorpo(mapa.cobra, i)] = ObtemDirecaoAtualCobra(mapa.cobra);
             }
@@ -805,7 +809,7 @@ tMapa PrintaCobraNoMapa(tMapa mapa){
         }
     }
     else {
-        for (i = 0; i < TamanhoCobra(mapa.cobra); i++){
+        for (i = 0; i < ObtemTamanhoDaCobra(mapa.cobra); i++){
             mapa.mapa[ObtemPosYParteDoCorpo(mapa.cobra, i)][ObtemPosXParteDoCorpo(mapa.cobra, i)] = 'X';
         }
     }
@@ -900,6 +904,82 @@ void FilePrintaEstatisticas(FILE *pFile, tMapa mapa){
     fprintf(pFile, "Numero de movimentos para cima: %d\n", ObtemQtdMovimentosCima(est));
     fprintf(pFile, "Numero de movimentos para esquerda: %d\n", ObtemQtdMovimentosEsquerda(est));
     fprintf(pFile, "Numero de movimentos para direita: %d\n", ObtemQtdMovimentosDireita(est));
+
+    fclose(pFile);
+}
+
+void FilePrintaRanking(FILE *pFile, tMapa mapa){
+    int i, j, cont=0;
+    int vet[mapa.linhas*mapa.colunas][3];
+
+    /*
+    Armazenar todos os valores onde a cobra passou pelo menos uma vez em uma matriz
+    coluna 0: LINHA - coluna 1: COLUNA - coluna 2: VALOR NO HEATMAP
+    */
+
+    for (i = 0; i < mapa.linhas; i++){
+        for (j = 0; j < mapa.colunas; j++){
+            if (mapa.mapaDeCalor[i][j] > 0){
+                vet[cont][0] = i;
+                vet[cont][1] = j;
+                vet[cont][2] = mapa.mapaDeCalor[i][j];
+                cont++;
+            }
+        }
+    }
+
+    //ORDENAR A MATRIZ DECRESCENTE:
+    int aux[3], pos, flag=0;
+    for (i = 0; i < cont; i++){
+
+        aux[0] = vet[i][0]; 
+        aux[1] = vet[i][1]; 
+        aux[2] = vet[i][2];
+        flag = 0;
+        for (j = (i + 1); j < cont; j++){
+            //Analizando valor no heatmap
+            if (aux[2] < vet[j][2]){
+                aux[0] = vet[j][0]; 
+                aux[1] = vet[j][1]; 
+                aux[2] = vet[j][2];
+                pos = j;
+                flag = 1;
+            }
+            else if (aux[2] == vet[j][2]){
+                //Analizando linhas
+                if (aux[0] > vet[j][0]){
+                    aux[0] = vet[j][0]; 
+                    aux[1] = vet[j][1]; 
+                    aux[2] = vet[j][2];
+                    pos = j;
+                    flag = 1;
+                }
+                else if (aux[0] == vet[j][0]){
+                    //Analizando colunas
+                    if (aux[1] > vet[j][1]){
+                        aux[0] = vet[j][0]; 
+                        aux[1] = vet[j][1]; 
+                        aux[2] = vet[j][2];
+                        pos = j;
+                        flag = 1;
+                    }
+                }
+            }
+        }//Fim do for "j"
+        if (flag){
+            vet[pos][0] = vet[i][0];
+            vet[pos][1] = vet[i][1];
+            vet[pos][2] = vet[i][2];
+            vet[i][0] = aux[0];
+            vet[i][1] = aux[1];
+            vet[i][2] = aux[2];
+        }
+    }//Fim do for "i"
+
+    //PRINTAR NO ARQUIVO:
+    for (i = 0; i < cont; i++){
+        fprintf(pFile, "(%d, %d) - %d\n", vet[i][0], vet[i][1], vet[i][2]);
+    }
 
     fclose(pFile);
 }
