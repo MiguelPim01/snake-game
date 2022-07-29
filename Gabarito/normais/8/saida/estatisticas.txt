@@ -1,0 +1,6 @@
+Numero de movimentos: 6
+Numero de movimentos sem pontuar: 6
+Numero de movimentos para baixo: 0
+Numero de movimentos para cima: 6
+Numero de movimentos para esquerda: 0
+Numero de movimentos para direita: 0

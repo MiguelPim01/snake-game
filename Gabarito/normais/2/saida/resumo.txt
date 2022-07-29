@@ -1,0 +1,46 @@
+Movimento 3 (h) fez a cobra crescer para o tamanho 2
+Movimento 11 (c) fez a cobra crescer para o tamanho 3
+Movimento 13 (a) fez a cobra crescer para o tamanho 4
+Movimento 17 (a) gerou dinheiro
+Movimento 23 (a) fez a cobra crescer para o tamanho 5
+Movimento 25 (a) gerou dinheiro
+Movimento 28 (h) gerou dinheiro
+Movimento 32 (h) gerou dinheiro
+Movimento 34 (c) gerou dinheiro
+Movimento 39 (c) fez a cobra crescer para o tamanho 6
+Movimento 41 (c) fez a cobra crescer para o tamanho 7
+Movimento 50 (c) gerou dinheiro
+Movimento 54 (c) gerou dinheiro
+Movimento 60 (c) gerou dinheiro
+Movimento 64 (a) fez a cobra crescer para o tamanho 8
+Movimento 65 (c) fez a cobra crescer para o tamanho 9
+Movimento 73 (c) fez a cobra crescer para o tamanho 10
+Movimento 76 (c) gerou dinheiro
+Movimento 77 (c) gerou dinheiro
+Movimento 78 (h) fez a cobra crescer para o tamanho 11
+Movimento 80 (h) gerou dinheiro
+Movimento 89 (c) fez a cobra crescer para o tamanho 12
+Movimento 93 (c) gerou dinheiro
+Movimento 100 (c) fez a cobra crescer para o tamanho 13
+Movimento 104 (c) gerou dinheiro
+Movimento 108 (c) fez a cobra crescer para o tamanho 14
+Movimento 111 (a) fez a cobra crescer para o tamanho 15
+Movimento 119 (c) fez a cobra crescer para o tamanho 16
+Movimento 142 (c) gerou dinheiro
+Movimento 153 (c) fez a cobra crescer para o tamanho 17
+Movimento 159 (c) gerou dinheiro
+Movimento 165 (c) gerou dinheiro
+Movimento 174 (c) gerou dinheiro
+Movimento 178 (c) fez a cobra crescer para o tamanho 18
+Movimento 180 (c) gerou dinheiro
+Movimento 182 (c) fez a cobra crescer para o tamanho 19
+Movimento 185 (c) gerou dinheiro
+Movimento 194 (c) fez a cobra crescer para o tamanho 20
+Movimento 199 (c) fez a cobra crescer para o tamanho 21
+Movimento 201 (c) gerou dinheiro
+Movimento 203 (c) fez a cobra crescer para o tamanho 22
+Movimento 207 (c) fez a cobra crescer para o tamanho 23
+Movimento 208 (c) fez a cobra crescer para o tamanho 24
+Movimento 219 (c) fez a cobra crescer para o tamanho 25
+Movimento 226 (c) fez a cobra crescer para o tamanho 26
+Movimento 261 (c) fez a cobra crescer para o tamanho 27, terminando o jogo

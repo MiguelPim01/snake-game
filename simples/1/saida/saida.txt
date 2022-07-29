@@ -1,3 +1,4 @@
+
 Estado do jogo apos o movimento 'c':
 ######
 #    #
@@ -78,6 +79,5 @@ Estado do jogo apos o movimento 'c':
 #  o #
 ######
 Pontuacao: 13
-
 Voce venceu!
 Pontuacao final: 13

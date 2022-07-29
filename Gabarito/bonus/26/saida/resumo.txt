@@ -1,0 +1,35 @@
+Movimento 9 (c) fez a cobra crescer para o tamanho 2
+Movimento 12 (a) fez a cobra crescer para o tamanho 3
+Movimento 17 (c) fez a cobra crescer para o tamanho 4
+Movimento 21 (c) fez a cobra crescer para o tamanho 5
+Movimento 22 (a) fez a cobra crescer para o tamanho 6
+Movimento 27 (a) fez a cobra crescer para o tamanho 7
+Movimento 31 (a) gerou dinheiro
+Movimento 37 (h) fez a cobra crescer para o tamanho 8
+Movimento 49 (c) fez a cobra crescer para o tamanho 9
+Movimento 50 (h) fez a cobra crescer para o tamanho 10
+Movimento 57 (c) gerou dinheiro
+Movimento 62 (c) fez a cobra crescer para o tamanho 11
+Movimento 66 (c) fez a cobra crescer para o tamanho 12
+Movimento 73 (a) gerou dinheiro
+Movimento 78 (c) fez a cobra crescer para o tamanho 13
+Movimento 80 (h) gerou dinheiro
+Movimento 82 (a) fez a cobra crescer para o tamanho 14
+Movimento 90 (c) gerou dinheiro
+Movimento 93 (c) gerou dinheiro
+Movimento 94 (c) fez a cobra crescer para o tamanho 15
+Movimento 95 (h) gerou dinheiro
+Movimento 98 (c) fez a cobra crescer para o tamanho 16
+Movimento 107 (a) gerou dinheiro
+Movimento 143 (h) fez a cobra crescer para o tamanho 17
+Movimento 148 (h) fez a cobra crescer para o tamanho 18
+Movimento 149 (c) gerou dinheiro
+Movimento 151 (c) fez a cobra crescer para o tamanho 19
+Movimento 158 (a) fez a cobra crescer para o tamanho 20
+Movimento 161 (h) gerou dinheiro
+Movimento 162 (c) fez a cobra crescer para o tamanho 21
+Movimento 166 (a) fez a cobra crescer para o tamanho 22
+Movimento 167 (c) fez a cobra crescer para o tamanho 23
+Movimento 171 (h) gerou dinheiro
+Movimento 172 (a) fez a cobra crescer para o tamanho 24
+Movimento 175 (c) resultou no fim de jogo por conta de colisao

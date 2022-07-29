@@ -1,3 +1,4 @@
+
 Estado do jogo apos o movimento 'c':
 ######## #
 # *      #
@@ -257,6 +258,5 @@ Estado do jogo apos o movimento 'c':
 XXXXXXXXXX
 ######## #
 Pontuacao: 14
-
 Game over!
 Pontuacao final: 14

@@ -160,11 +160,11 @@ int main(int argc, char *argv[])
     
     /*###### LEITURA E INICIALIZAÇÃO DO MAPA DO JOGO (Criacao do arquivo "Inicializacao.txt") ######*/
 
-    sprintf(caminho, "%s/saida/Inicializacao.txt", argv[1]);
+    sprintf(caminho, "%s/saida/inicializacao.txt", argv[1]);
     pFileMapaOut = fopen(caminho, "w");
 
     if (!pFileMapaOut){
-        printf("ERRO: Falha na abertura do arquivo Inicializacao.txt. %s/saida/Incializacao.txt\n", argv[1]);
+        printf("ERRO: Falha na abertura do arquivo inicializacao.txt. %s/saida/incializacao.txt\n", argv[1]);
         return 1;
     }
 
@@ -651,6 +651,7 @@ tMapa MoveCobraNoMapa(FILE *pFileResumo, tMapa mapa, char mov){
             switch (mapa.mapa[yCabeca][xCabeca+1]){
                 case '#':
                     mapa.cobra = MorreCobra(mapa.cobra);
+                    mapa.cobra = AumentaQtdMovSemPontuarDaCobra(mapa.cobra);
                     fprintf(pFileResumo, "Movimento %d (%c) resultou no fim de jogo por conta de colisao\n", ObtemQtdMovimentos(est)+1, mov);
                     break;    
                 case 'o':
@@ -658,6 +659,7 @@ tMapa MoveCobraNoMapa(FILE *pFileResumo, tMapa mapa, char mov){
                         mapa.cobra = MorreCobra(mapa.cobra);
                         fprintf(pFileResumo, "Movimento %d (%c) resultou no fim de jogo por conta de colisao\n", ObtemQtdMovimentos(est)+1, mov);
                     }
+                    mapa.cobra = AumentaQtdMovSemPontuarDaCobra(mapa.cobra);
                     break;
                 case '*':
                     mapa.cobra = AumentaTamanhoCobra(mapa.cobra);
@@ -682,6 +684,7 @@ tMapa MoveCobraNoMapa(FILE *pFileResumo, tMapa mapa, char mov){
             switch (mapa.mapa[yCabeca-1][xCabeca]){
                 case '#':
                     mapa.cobra = MorreCobra(mapa.cobra);
+                    mapa.cobra = AumentaQtdMovSemPontuarDaCobra(mapa.cobra);
                     fprintf(pFileResumo, "Movimento %d (%c) resultou no fim de jogo por conta de colisao\n", ObtemQtdMovimentos(est)+1, mov);
                     break;    
                 case 'o':
@@ -689,6 +692,7 @@ tMapa MoveCobraNoMapa(FILE *pFileResumo, tMapa mapa, char mov){
                         mapa.cobra = MorreCobra(mapa.cobra);
                         fprintf(pFileResumo, "Movimento %d (%c) resultou no fim de jogo por conta de colisao\n", ObtemQtdMovimentos(est)+1, mov);
                     }
+                    mapa.cobra = AumentaQtdMovSemPontuarDaCobra(mapa.cobra);
                     break;
                 case '*':
                     mapa.cobra = AumentaTamanhoCobra(mapa.cobra);
@@ -713,6 +717,7 @@ tMapa MoveCobraNoMapa(FILE *pFileResumo, tMapa mapa, char mov){
             switch (mapa.mapa[yCabeca][xCabeca-1]){
                 case '#':
                     mapa.cobra = MorreCobra(mapa.cobra);
+                    mapa.cobra = AumentaQtdMovSemPontuarDaCobra(mapa.cobra);
                     fprintf(pFileResumo, "Movimento %d (%c) resultou no fim de jogo por conta de colisao\n", ObtemQtdMovimentos(est)+1, mov);
                     break;    
                 case 'o':
@@ -720,6 +725,7 @@ tMapa MoveCobraNoMapa(FILE *pFileResumo, tMapa mapa, char mov){
                         mapa.cobra = MorreCobra(mapa.cobra);
                         fprintf(pFileResumo, "Movimento %d (%c) resultou no fim de jogo por conta de colisao\n", ObtemQtdMovimentos(est)+1, mov);
                     }
+                    mapa.cobra = AumentaQtdMovSemPontuarDaCobra(mapa.cobra);
                     break;
                 case '*':
                     mapa.cobra = AumentaTamanhoCobra(mapa.cobra);
@@ -744,6 +750,7 @@ tMapa MoveCobraNoMapa(FILE *pFileResumo, tMapa mapa, char mov){
             switch (mapa.mapa[yCabeca+1][xCabeca]){
                 case '#':
                     mapa.cobra = MorreCobra(mapa.cobra);
+                    mapa.cobra = AumentaQtdMovSemPontuarDaCobra(mapa.cobra);
                     fprintf(pFileResumo, "Movimento %d (%c) resultou no fim de jogo por conta de colisao\n", ObtemQtdMovimentos(est)+1, mov);
                     break;    
                 case 'o':
@@ -751,6 +758,7 @@ tMapa MoveCobraNoMapa(FILE *pFileResumo, tMapa mapa, char mov){
                         mapa.cobra = MorreCobra(mapa.cobra);
                         fprintf(pFileResumo, "Movimento %d (%c) resultou no fim de jogo por conta de colisao\n", ObtemQtdMovimentos(est)+1, mov);
                     }
+                    mapa.cobra = AumentaQtdMovSemPontuarDaCobra(mapa.cobra);
                     break;
                 case '*':
                     mapa.cobra = AumentaTamanhoCobra(mapa.cobra);
@@ -817,7 +825,7 @@ tMapa PrintaCobraNoMapa(tMapa mapa){
 }
 
 tMapa AtualizaMapaDeCalor(tMapa mapa){
-    mapa.mapaDeCalor[ObtemPosYCabecaInicial(mapa)][ObtemPosXCabecaInicial(mapa)] += 1;
+    mapa.mapaDeCalor[ObtemPosYCabeca(mapa.cobra)][ObtemPosXCabeca(mapa.cobra)] += 1;
     return mapa;
 }
 
@@ -826,7 +834,9 @@ void FilePrintaMapaNaSaida(FILE *pFile, tMapa mapa, char mov){
 
     //Funcao tambem tem a opcao de printar na saida padra (basta apenas tirar o comentario dos printfs)
 
+    fprintf(pFile, "\n");
     fprintf(pFile, "Estado do jogo apos o movimento '%c':\n", mov);
+    //printf("\n");
     //printf("Estado do jogo apos o movimento '%c':\n", mov);
     for (i = 0; i < mapa.linhas; i++){
         for (j = 0; j < mapa.colunas; j++){
@@ -837,9 +847,7 @@ void FilePrintaMapaNaSaida(FILE *pFile, tMapa mapa, char mov){
         //printf("\n");
     }
     fprintf(pFile, "Pontuacao: %d\n", ObtemPontuacaoDaCobra(mapa.cobra));
-    fprintf(pFile, "\n");
     //printf("Pontuacao: %d\n", ObtemPontuacaoDaCobra(mapa.cobra));
-    //printf("\n");
     if (!CobraEstaViva(mapa.cobra)){
         fprintf(pFile, "Game over!\nPontuacao final: %d", ObtemPontuacaoDaCobra(mapa.cobra));
         //printf("Game over!\nPontuacao final: %d", ObtemPontuacaoDaCobra(mapa.cobra));
@@ -885,7 +893,12 @@ void FilePrintaHeatMap(FILE *pFile, tMapa mapa){
 
     for (i = 0; i < mapa.linhas; i++){
         for (j = 0; j < mapa.colunas; j++){
-            fprintf(pFile, "%d ", mapa.mapaDeCalor[i][j]);
+            if (j == (mapa.colunas - 1)){
+                fprintf(pFile, "%d", mapa.mapaDeCalor[i][j]);
+            }
+            else {
+                fprintf(pFile, "%d ", mapa.mapaDeCalor[i][j]);
+            }
         }
         fprintf(pFile, "\n");
     }
