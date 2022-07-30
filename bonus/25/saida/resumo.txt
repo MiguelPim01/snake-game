@@ -1,0 +1,4 @@
+Movimento 22 (a) fez a cobra crescer para o tamanho 2
+Movimento 27 (c) fez a cobra crescer para o tamanho 3
+Movimento 34 (h) fez a cobra crescer para o tamanho 4
+Movimento 67 (c) fez a cobra crescer para o tamanho 5, terminando o jogo

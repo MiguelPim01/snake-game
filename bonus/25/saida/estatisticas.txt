@@ -1,0 +1,6 @@
+Numero de movimentos: 67
+Numero de movimentos sem pontuar: 63
+Numero de movimentos para baixo: 15
+Numero de movimentos para cima: 39
+Numero de movimentos para esquerda: 8
+Numero de movimentos para direita: 5

@@ -43,7 +43,7 @@ typedef struct {
 tCobra InicializaCobra(FILE *pFile, tCobra cobra, int xCabeca, int yCabeca);
 
 //Move a cobra em "cobra.PosCorpo[][]"
-tCobra MoveCobra(tCobra cobra, char mov, int linhas, int colunas);
+tCobra MoveCobra(tCobra cobra, char mov, int linhas, int colunas, int xCabeca, int yCabeca);
 
 //Retorna: 1 (direita), 2 (cima), 3 (esquerda) e 4 (baixo)
 int DirecaoDoMovimento(tCobra cobra, char mov);
@@ -86,6 +86,10 @@ typedef struct {
     int mapaDeCalor[LINHA_MAX][COLUNA_MAX]; //Matriz para armazenar o mapa de calor
     int linhas; //Numero de linhas das matrizes
     int colunas; //Numero de colunas das matrizes
+    int tunel1[2];
+    int tunel2[2];
+    int dxTunel;
+    int dyTunel;
 } tMapa;
 
 //Leitura e inicializacao das variaveis do tipo tMapa
@@ -245,6 +249,7 @@ int main(int argc, char *argv[])
     return 0;
 }
 
+
 /* FUNCOES DO TIPO tEstatistica */
 
 tEstatistica InicializaEstatistica(tEstatistica est){
@@ -332,8 +337,8 @@ tCobra InicializaCobra(FILE *pFile, tCobra cobra, int xCabeca, int yCabeca){
     return cobra;
 }
 
-tCobra MoveCobra(tCobra cobra, char mov, int linhas, int colunas){
-    int i, deltaX, deltaY;
+tCobra MoveCobra(tCobra cobra, char mov, int linhas, int colunas, int xCabeca, int yCabeca){
+    int i;
     int aux1[2], aux2[2];
     cobra.estatistica = AumentaQtdMov(cobra.estatistica);
     switch (DirecaoDoMovimento(cobra, mov)){
@@ -341,15 +346,13 @@ tCobra MoveCobra(tCobra cobra, char mov, int linhas, int colunas){
         //MOVE COBRA PARA DIREITA
         case 1:
             cobra.estatistica = AumentaQtdMovDireita(cobra.estatistica);
-            deltaX = 1;
-            deltaY = 0;
             cobra.direcaoAtual = '>';
             aux1[0] = cobra.PosCorpo[0][0];
             aux1[1] = cobra.PosCorpo[0][1];
 
             /* ------ Move a cabeca da cobra ------ */
-            cobra.PosCorpo[0][0] += deltaX;
-            cobra.PosCorpo[0][1] += deltaY;
+            cobra.PosCorpo[0][0] = xCabeca;
+            cobra.PosCorpo[0][1] = yCabeca;
 
             /* ------ Verifica se acabou o mapa ------ */
             if (cobra.PosCorpo[0][0] >= colunas){
@@ -360,15 +363,13 @@ tCobra MoveCobra(tCobra cobra, char mov, int linhas, int colunas){
         //MOVE COBRA PARA CIMA
         case 2:
             cobra.estatistica = AumentaQtdMovCima(cobra.estatistica);
-            deltaX = 0;
-            deltaY = -1;
             cobra.direcaoAtual = '^';
             aux1[0] = cobra.PosCorpo[0][0];
             aux1[1] = cobra.PosCorpo[0][1];
 
             /* ------ Move a cabeca da cobra ------ */
-            cobra.PosCorpo[0][0] += deltaX;
-            cobra.PosCorpo[0][1] += deltaY;
+            cobra.PosCorpo[0][0] = xCabeca;
+            cobra.PosCorpo[0][1] = yCabeca;
 
             /* ------ Verifica se acabou o mapa ------ */
             if (cobra.PosCorpo[0][1] < 0){
@@ -379,15 +380,13 @@ tCobra MoveCobra(tCobra cobra, char mov, int linhas, int colunas){
         //MOVE COBRA PARA ESQUERDA
         case 3:
             cobra.estatistica = AumentaQtdMovEsquerda(cobra.estatistica);
-            deltaX = -1;
-            deltaY = 0;
             cobra.direcaoAtual = '<';
             aux1[0] = cobra.PosCorpo[0][0];
             aux1[1] = cobra.PosCorpo[0][1];
 
             /* ------ Move a cabeca da cobra ------ */
-            cobra.PosCorpo[0][0] += deltaX;
-            cobra.PosCorpo[0][1] += deltaY;
+            cobra.PosCorpo[0][0] = xCabeca;
+            cobra.PosCorpo[0][1] = yCabeca;
 
             /* ------ Verifica se acabou o mapa ------ */
             if (cobra.PosCorpo[0][0] < 0){
@@ -398,15 +397,13 @@ tCobra MoveCobra(tCobra cobra, char mov, int linhas, int colunas){
         //MOVE COBRA PARA BAIXO
         case 4:
             cobra.estatistica = AumentaQtdMovBaixo(cobra.estatistica);
-            deltaX = 0;
-            deltaY = 1;
             cobra.direcaoAtual = 'v';
             aux1[0] = cobra.PosCorpo[0][0];
             aux1[1] = cobra.PosCorpo[0][1];
 
             /* ------ Move a cabeca da cobra ------ */
-            cobra.PosCorpo[0][0] += deltaX;
-            cobra.PosCorpo[0][1] += deltaY;
+            cobra.PosCorpo[0][0] = xCabeca;
+            cobra.PosCorpo[0][1] = yCabeca;
 
             /* ------ Verifica se acabou o mapa ------ */
             if (cobra.PosCorpo[0][1] >= linhas){
@@ -554,7 +551,7 @@ int ObtemTamanhoDaCobra(tCobra cobra){
 /* FUNCOES DO TIPO tMapa */
 
 tMapa LeMapaEInicializa(FILE *pFileOut, FILE *pFile, tMapa mapa){
-    int i, j;
+    int i, j, cont=0;
     
     //Le as linhas e colunas do mapa
     fscanf(pFile, "%d %d%*[^\n]", &mapa.linhas, &mapa.colunas);
@@ -564,6 +561,15 @@ tMapa LeMapaEInicializa(FILE *pFileOut, FILE *pFile, tMapa mapa){
     for (i = 0; i < mapa.linhas; i++){
         for (j = 0; j < mapa.colunas; j++){
             fscanf(pFile, "%c", &mapa.mapa[i][j]);
+            if (mapa.mapa[i][j] == '@' && !cont){
+                mapa.tunel1[0] = j;
+                mapa.tunel1[1] = i;
+                cont = 1;
+            }
+            else if (mapa.mapa[i][j] == '@'){
+                mapa.tunel2[0] = j;
+                mapa.tunel2[1] = i;
+            }
 
             //Printa no arquivo "Incializacao.txt"
             fprintf(pFileOut, "%c", mapa.mapa[i][j]);
@@ -575,6 +581,11 @@ tMapa LeMapaEInicializa(FILE *pFileOut, FILE *pFile, tMapa mapa){
         fscanf(pFile, "%*c");
     }
     fclose(pFile);
+
+    if (cont){
+        mapa.dxTunel = mapa.tunel1[0] - mapa.tunel2[0];
+        mapa.dyTunel = mapa.tunel1[1] - mapa.tunel2[1];
+    }
 
     //Inicializa cobra e fecha arquivo "Inicializacao.txt"
     mapa.cobra = InicializaCobra(pFileOut, mapa.cobra, ObtemPosXCabecaInicial(mapa), ObtemPosYCabecaInicial(mapa));
@@ -645,7 +656,7 @@ tMapa MoveCobraNoMapa(FILE *pFileResumo, tMapa mapa, char mov){
     xCabeca = ObtemPosXCabeca(mapa.cobra);
     yCabeca = ObtemPosYCabeca(mapa.cobra);
 
-    //Verificação de onde a cabeca da cobra estara indo (#, o, *, $) 
+    //Verificação de onde a cabeca da cobra estara indo (#, o, *, $, @) 
     switch (DirecaoDoMovimento(mapa.cobra, mov)){
         case 1:
             if ((xCabeca + 1) >= mapa.colunas){
@@ -653,7 +664,28 @@ tMapa MoveCobraNoMapa(FILE *pFileResumo, tMapa mapa, char mov){
             }
             else {
                 xCabeca += 1;
-            } 
+            }
+            //TRATANDO OS TUNEIS (direita):
+            if (mapa.mapa[yCabeca][xCabeca] == '@'){
+                //Indo do tunel 1 para o tunel 2:
+                if (xCabeca == mapa.tunel1[0] && yCabeca == mapa.tunel1[1]){
+                    yCabeca -= mapa.dyTunel;
+                    xCabeca -= mapa.dxTunel;
+                    xCabeca++; //Devido ao movimento ser pra direita
+                    if (xCabeca >= mapa.colunas){
+                        xCabeca = 0;
+                    }
+                }
+                //Indo do tunel 2 para o tunel 1:
+                else {
+                    yCabeca += mapa.dyTunel;
+                    xCabeca += mapa.dxTunel;
+                    xCabeca++; //Devido ao movimento ser pra direita
+                    if (xCabeca >= mapa.colunas){
+                        xCabeca = 0;
+                    }
+                }
+            }
             switch (mapa.mapa[yCabeca][xCabeca]){
                 case '#':
                     mapa.cobra = MorreCobra(mapa.cobra);
@@ -692,6 +724,27 @@ tMapa MoveCobraNoMapa(FILE *pFileResumo, tMapa mapa, char mov){
             }
             else {
                 yCabeca -= 1;
+            }
+            //TRATANDO OS TUNEIS (direita):
+            if (mapa.mapa[yCabeca][xCabeca] == '@'){
+                //Indo do tunel 1 para o tunel 2:
+                if (xCabeca == mapa.tunel1[0] && yCabeca == mapa.tunel1[1]){
+                    yCabeca -= mapa.dyTunel;
+                    yCabeca--; //Devido ao movimento ser pra cima
+                    xCabeca -= mapa.dxTunel;
+                    if (yCabeca < 0){
+                        yCabeca = mapa.linhas - 1;
+                    }
+                }
+                //Indo do tunel 2 para o tunel 1:
+                else {
+                    yCabeca += mapa.dyTunel;
+                    yCabeca--; //Devido ao movimento ser pra cima
+                    xCabeca += mapa.dxTunel;
+                    if (yCabeca < 0){
+                        yCabeca = mapa.linhas - 1;
+                    }
+                }
             }
             switch (mapa.mapa[yCabeca][xCabeca]){
                 case '#':
@@ -732,6 +785,27 @@ tMapa MoveCobraNoMapa(FILE *pFileResumo, tMapa mapa, char mov){
             else {
                 xCabeca -= 1;
             }
+            //TRATANDO OS TUNEIS (direita):
+            if (mapa.mapa[yCabeca][xCabeca] == '@'){
+                //Indo do tunel 1 para o tunel 2:
+                if (xCabeca == mapa.tunel1[0] && yCabeca == mapa.tunel1[1]){
+                    yCabeca -= mapa.dyTunel;
+                    xCabeca -= mapa.dxTunel;
+                    xCabeca--; //Devido ao movimento ser pra esquerda
+                    if (xCabeca < 0){
+                        xCabeca = mapa.colunas - 1;
+                    }
+                }
+                //Indo do tunel 2 para o tunel 1:
+                else {
+                    yCabeca += mapa.dyTunel;
+                    xCabeca += mapa.dxTunel;
+                    xCabeca--; //Devido ao movimento ser pra esquerda
+                    if (xCabeca < 0){
+                        xCabeca = mapa.colunas - 1;
+                    }
+                }
+            }
             switch (mapa.mapa[yCabeca][xCabeca]){
                 case '#':
                     mapa.cobra = MorreCobra(mapa.cobra);
@@ -771,6 +845,27 @@ tMapa MoveCobraNoMapa(FILE *pFileResumo, tMapa mapa, char mov){
             else {
                 yCabeca += 1;
             }
+            //TRATANDO OS TUNEIS (direita):
+            if (mapa.mapa[yCabeca][xCabeca] == '@'){
+                //Indo do tunel 1 para o tunel 2:
+                if (xCabeca == mapa.tunel1[0] && yCabeca == mapa.tunel1[1]){
+                    yCabeca -= mapa.dyTunel;
+                    yCabeca++; //Devido ao movimento ser pra baixo
+                    xCabeca -= mapa.dxTunel;
+                    if (yCabeca >= mapa.linhas){
+                        yCabeca = 0;
+                    }
+                }
+                //Indo do tunel 2 para o tunel 1:
+                else {
+                    yCabeca += mapa.dyTunel;
+                    yCabeca++; //Devido ao movimento ser pra baixo
+                    xCabeca += mapa.dxTunel;
+                    if (yCabeca >= mapa.linhas){
+                        yCabeca = 0;
+                    }
+                }
+            }
             switch (mapa.mapa[yCabeca][xCabeca]){
                 case '#':
                     mapa.cobra = MorreCobra(mapa.cobra);
@@ -805,7 +900,7 @@ tMapa MoveCobraNoMapa(FILE *pFileResumo, tMapa mapa, char mov){
             break;
     }
     
-    mapa.cobra = MoveCobra(mapa.cobra, mov, mapa.linhas, mapa.colunas);
+    mapa.cobra = MoveCobra(mapa.cobra, mov, mapa.linhas, mapa.colunas, xCabeca, yCabeca);
 
     mapa = RefrescaMapa(mapa);
     mapa = PrintaCobraNoMapa(mapa);

@@ -1,0 +1,7 @@
+Movimento 3 (h) gerou dinheiro
+Movimento 26 (h) fez a cobra crescer para o tamanho 2
+Movimento 40 (h) fez a cobra crescer para o tamanho 3
+Movimento 42 (c) fez a cobra crescer para o tamanho 4
+Movimento 59 (c) fez a cobra crescer para o tamanho 5
+Movimento 69 (c) fez a cobra crescer para o tamanho 6
+Movimento 71 (c) fez a cobra crescer para o tamanho 7, terminando o jogo
