@@ -661,7 +661,7 @@ tMapa MoveCobraNoMapa(FILE *pFileResumo, tMapa mapa, char mov){
                     fprintf(pFileResumo, "Movimento %d (%c) resultou no fim de jogo por conta de colisao\n", ObtemQtdMovimentos(est)+1, mov);
                     break;    
                 case 'o':
-                    if (!EhFimDaCobra(mapa.cobra, xCabeca+1, yCabeca)){
+                    if (!EhFimDaCobra(mapa.cobra, xCabeca, yCabeca)){
                         mapa.cobra = MorreCobra(mapa.cobra);
                         fprintf(pFileResumo, "Movimento %d (%c) resultou no fim de jogo por conta de colisao\n", ObtemQtdMovimentos(est)+1, mov);
                     }
@@ -700,7 +700,7 @@ tMapa MoveCobraNoMapa(FILE *pFileResumo, tMapa mapa, char mov){
                     fprintf(pFileResumo, "Movimento %d (%c) resultou no fim de jogo por conta de colisao\n", ObtemQtdMovimentos(est)+1, mov);
                     break;    
                 case 'o':
-                    if (!EhFimDaCobra(mapa.cobra, xCabeca, yCabeca-1)){
+                    if (!EhFimDaCobra(mapa.cobra, xCabeca, yCabeca)){
                         mapa.cobra = MorreCobra(mapa.cobra);
                         fprintf(pFileResumo, "Movimento %d (%c) resultou no fim de jogo por conta de colisao\n", ObtemQtdMovimentos(est)+1, mov);
                     }
@@ -739,7 +739,7 @@ tMapa MoveCobraNoMapa(FILE *pFileResumo, tMapa mapa, char mov){
                     fprintf(pFileResumo, "Movimento %d (%c) resultou no fim de jogo por conta de colisao\n", ObtemQtdMovimentos(est)+1, mov);
                     break;    
                 case 'o':
-                    if (!EhFimDaCobra(mapa.cobra, xCabeca-1, yCabeca)){
+                    if (!EhFimDaCobra(mapa.cobra, xCabeca, yCabeca)){
                         mapa.cobra = MorreCobra(mapa.cobra);
                         fprintf(pFileResumo, "Movimento %d (%c) resultou no fim de jogo por conta de colisao\n", ObtemQtdMovimentos(est)+1, mov);
                     }
@@ -778,7 +778,7 @@ tMapa MoveCobraNoMapa(FILE *pFileResumo, tMapa mapa, char mov){
                     fprintf(pFileResumo, "Movimento %d (%c) resultou no fim de jogo por conta de colisao\n", ObtemQtdMovimentos(est)+1, mov);
                     break;    
                 case 'o':
-                    if (!EhFimDaCobra(mapa.cobra, xCabeca, yCabeca+1)){
+                    if (!EhFimDaCobra(mapa.cobra, xCabeca, yCabeca)){
                         mapa.cobra = MorreCobra(mapa.cobra);
                         fprintf(pFileResumo, "Movimento %d (%c) resultou no fim de jogo por conta de colisao\n", ObtemQtdMovimentos(est)+1, mov);
                     }

@@ -1,0 +1,6 @@
+Movimento 7 (a) gerou dinheiro
+Movimento 18 (a) fez a cobra crescer para o tamanho 2
+Movimento 23 (c) fez a cobra crescer para o tamanho 3
+Movimento 27 (c) fez a cobra crescer para o tamanho 4
+Movimento 30 (c) fez a cobra crescer para o tamanho 5
+Movimento 34 (c) resultou no fim de jogo por conta de colisao

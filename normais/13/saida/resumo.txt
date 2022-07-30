@@ -1,0 +1,6 @@
+Movimento 5 (c) gerou dinheiro
+Movimento 10 (a) fez a cobra crescer para o tamanho 2
+Movimento 40 (c) fez a cobra crescer para o tamanho 3
+Movimento 52 (c) gerou dinheiro
+Movimento 55 (c) gerou dinheiro
+Movimento 63 (c) resultou no fim de jogo por conta de colisao

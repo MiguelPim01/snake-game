@@ -1,0 +1,39 @@
+Movimento 3 (c) gerou dinheiro
+Movimento 13 (a) fez a cobra crescer para o tamanho 2
+Movimento 18 (h) gerou dinheiro
+Movimento 23 (c) fez a cobra crescer para o tamanho 3
+Movimento 24 (c) gerou dinheiro
+Movimento 31 (c) fez a cobra crescer para o tamanho 4
+Movimento 35 (a) fez a cobra crescer para o tamanho 5
+Movimento 42 (c) fez a cobra crescer para o tamanho 6
+Movimento 48 (c) fez a cobra crescer para o tamanho 7
+Movimento 56 (a) gerou dinheiro
+Movimento 74 (h) gerou dinheiro
+Movimento 78 (c) fez a cobra crescer para o tamanho 8
+Movimento 90 (h) fez a cobra crescer para o tamanho 9
+Movimento 97 (h) fez a cobra crescer para o tamanho 10
+Movimento 108 (c) fez a cobra crescer para o tamanho 11
+Movimento 114 (c) fez a cobra crescer para o tamanho 12
+Movimento 120 (c) gerou dinheiro
+Movimento 130 (h) fez a cobra crescer para o tamanho 13
+Movimento 142 (a) fez a cobra crescer para o tamanho 14
+Movimento 171 (c) fez a cobra crescer para o tamanho 15
+Movimento 208 (a) fez a cobra crescer para o tamanho 16
+Movimento 210 (c) fez a cobra crescer para o tamanho 17
+Movimento 214 (c) fez a cobra crescer para o tamanho 18
+Movimento 218 (c) fez a cobra crescer para o tamanho 19
+Movimento 237 (c) fez a cobra crescer para o tamanho 20
+Movimento 241 (c) fez a cobra crescer para o tamanho 21
+Movimento 255 (h) fez a cobra crescer para o tamanho 22
+Movimento 258 (c) fez a cobra crescer para o tamanho 23
+Movimento 268 (c) gerou dinheiro
+Movimento 287 (a) fez a cobra crescer para o tamanho 24
+Movimento 298 (a) fez a cobra crescer para o tamanho 25
+Movimento 308 (c) fez a cobra crescer para o tamanho 26
+Movimento 331 (c) fez a cobra crescer para o tamanho 27
+Movimento 335 (c) fez a cobra crescer para o tamanho 28
+Movimento 339 (h) fez a cobra crescer para o tamanho 29
+Movimento 353 (c) fez a cobra crescer para o tamanho 30
+Movimento 396 (c) fez a cobra crescer para o tamanho 31
+Movimento 401 (c) fez a cobra crescer para o tamanho 32
+Movimento 405 (c) resultou no fim de jogo por conta de colisao
