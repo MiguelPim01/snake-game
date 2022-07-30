@@ -648,7 +648,13 @@ tMapa MoveCobraNoMapa(FILE *pFileResumo, tMapa mapa, char mov){
     //Verificação de onde a cabeca da cobra estara indo (#, o, *, $) 
     switch (DirecaoDoMovimento(mapa.cobra, mov)){
         case 1:
-            switch (mapa.mapa[yCabeca][xCabeca+1]){
+            if ((xCabeca + 1) >= mapa.colunas){
+                xCabeca = 0;
+            }
+            else {
+                xCabeca += 1;
+            } 
+            switch (mapa.mapa[yCabeca][xCabeca]){
                 case '#':
                     mapa.cobra = MorreCobra(mapa.cobra);
                     mapa.cobra = AumentaQtdMovSemPontuarDaCobra(mapa.cobra);
@@ -681,7 +687,13 @@ tMapa MoveCobraNoMapa(FILE *pFileResumo, tMapa mapa, char mov){
             }
             break;
         case 2:
-            switch (mapa.mapa[yCabeca-1][xCabeca]){
+            if ((yCabeca - 1) < 0){
+                yCabeca = mapa.linhas - 1;
+            }
+            else {
+                yCabeca -= 1;
+            }
+            switch (mapa.mapa[yCabeca][xCabeca]){
                 case '#':
                     mapa.cobra = MorreCobra(mapa.cobra);
                     mapa.cobra = AumentaQtdMovSemPontuarDaCobra(mapa.cobra);
@@ -714,7 +726,13 @@ tMapa MoveCobraNoMapa(FILE *pFileResumo, tMapa mapa, char mov){
             }
             break;
         case 3:
-            switch (mapa.mapa[yCabeca][xCabeca-1]){
+            if ((xCabeca - 1) < 0){
+                xCabeca = mapa.colunas - 1;
+            }
+            else {
+                xCabeca -= 1;
+            }
+            switch (mapa.mapa[yCabeca][xCabeca]){
                 case '#':
                     mapa.cobra = MorreCobra(mapa.cobra);
                     mapa.cobra = AumentaQtdMovSemPontuarDaCobra(mapa.cobra);
@@ -747,7 +765,13 @@ tMapa MoveCobraNoMapa(FILE *pFileResumo, tMapa mapa, char mov){
             }
             break;
         case 4:
-            switch (mapa.mapa[yCabeca+1][xCabeca]){
+            if ((yCabeca + 1) >= mapa.linhas){
+                yCabeca = 0;
+            }
+            else {
+                yCabeca += 1;
+            }
+            switch (mapa.mapa[yCabeca][xCabeca]){
                 case '#':
                     mapa.cobra = MorreCobra(mapa.cobra);
                     mapa.cobra = AumentaQtdMovSemPontuarDaCobra(mapa.cobra);
