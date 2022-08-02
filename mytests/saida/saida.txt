@@ -1,0 +1,101 @@
+
+Estado do jogo apos o movimento 'c':
+###### $  
+     #   #
+# o> #    
+#  @  @ * 
+#*   #    
+######    
+Pontuacao: 1
+
+Estado do jogo apos o movimento 'c':
+###### $  
+     #   #
+#  o>#    
+#  @  @ * 
+#*   #    
+######    
+Pontuacao: 1
+
+Estado do jogo apos o movimento 'h':
+###### $  
+     #   #
+#   o#    
+#  @v @ * 
+#*   #    
+######    
+Pontuacao: 1
+
+Estado do jogo apos o movimento 'c':
+###### $  
+     #   #
+#    #    
+#  @o @ * 
+#*  v#    
+######    
+Pontuacao: 1
+
+Estado do jogo apos o movimento 'h':
+###### $  
+     #   #
+#    #    
+#  @  @ * 
+#* <o#    
+######    
+Pontuacao: 1
+
+Estado do jogo apos o movimento 'c':
+###### $  
+     #   #
+#    #    
+#  @  @ * 
+#*<o #    
+######    
+Pontuacao: 1
+
+Estado do jogo apos o movimento 'h':
+###### $  
+     #   #
+#    #    
+# ^@  @ * 
+#*o  #    
+######    
+Pontuacao: 1
+
+Estado do jogo apos o movimento 'h':
+###### $  
+     #   #
+#    #    
+# o@  @>* 
+#*   #    
+######    
+Pontuacao: 1
+
+Estado do jogo apos o movimento 'c':
+###### $  
+     #   #
+#    #    
+# o@  @o> 
+#*   #    
+######    
+Pontuacao: 2
+
+Estado do jogo apos o movimento 'c':
+###### $  
+     #   #
+#    #    
+#  @  @oo>
+#*   #    
+######    
+Pontuacao: 2
+
+Estado do jogo apos o movimento 'c':
+###### $  
+     #   #
+#    #    
+X  @  @ XX
+#*   #    
+######    
+Pontuacao: 2
+Game over!
+Pontuacao final: 2
