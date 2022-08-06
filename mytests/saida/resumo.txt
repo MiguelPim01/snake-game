@@ -1,3 +1,1 @@
-Movimento 1 (c) fez a cobra crescer para o tamanho 2
-Movimento 9 (c) fez a cobra crescer para o tamanho 3
-Movimento 11 (c) resultou no fim de jogo por conta de colisao
+Movimento 1 (c) fez a cobra crescer para o tamanho 2, terminando o jogo

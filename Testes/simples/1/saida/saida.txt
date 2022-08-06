@@ -1,0 +1,83 @@
+
+Estado do jogo apos o movimento 'c':
+######
+#    #
+# >* #
+#*  *#
+#   $#
+######
+Pontuacao: 0
+
+Estado do jogo apos o movimento 'c':
+######
+#    #
+# o> #
+#*  *#
+#   $#
+######
+Pontuacao: 1
+
+Estado do jogo apos o movimento 'c':
+######
+#    #
+#  o>#
+#*  *#
+#   $#
+######
+Pontuacao: 1
+
+Estado do jogo apos o movimento 'h':
+######
+#    #
+#  oo#
+#*  v#
+#   $#
+######
+Pontuacao: 2
+
+Estado do jogo apos o movimento 'c':
+######
+#    #
+#   o#
+#*  o#
+#   v#
+######
+Pontuacao: 12
+
+Estado do jogo apos o movimento 'h':
+######
+#    #
+#    #
+#*  o#
+#  <o#
+######
+Pontuacao: 12
+
+Estado do jogo apos o movimento 'h':
+######
+#    #
+#    #
+#* ^ #
+#  oo#
+######
+Pontuacao: 12
+
+Estado do jogo apos o movimento 'a':
+######
+#    #
+#    #
+#*<o #
+#  o #
+######
+Pontuacao: 12
+
+Estado do jogo apos o movimento 'c':
+######
+#    #
+#    #
+#<oo #
+#  o #
+######
+Pontuacao: 13
+Voce venceu!
+Pontuacao final: 13

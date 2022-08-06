@@ -1,7 +1,8 @@
-###### $  
-     #   #
-# >* #    
-#  @  @ * 
-#*   #    
-######    
-A cobra comecara o jogo na linha 3 e coluna 3
+### # 
+#   # 
+ >* # 
+#    #
+#    #
+#    #
+##@##@
+A cobra comecara o jogo na linha 3 e coluna 2
