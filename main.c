@@ -15,6 +15,11 @@
 #define CABECA_BAIXO 'v'
 #define PARTE_MORTA 'X'
 
+#define DIREITA 1
+#define CIMA 2
+#define ESQUERDA 3
+#define BAIXO 4
+
 
 typedef struct {
     int qtdMovimentos;             /*### Struct para armazenar todas as estatisticas da cobra ###*/
@@ -204,7 +209,7 @@ int main(int argc, char *argv[])
         //Move a cobra no mapa do jogo
         mapa = MoveCobraNoMapa(pFileResumo, mapa, mov);
         
-        //Printa o estado atual do mapa no arquivo "saida.txt"
+        //Printa o estado atual do mapa na saida
         PrintaMapaNaSaida(mapa, mov);
 
         //Atualiza o mapa de calor, somando 1 a posicao da cabeca da cobra
@@ -346,7 +351,7 @@ tCobra MoveCobra(tCobra cobra, char mov, int linhas, int colunas, int xCabeca, i
     switch (DirecaoDoMovimento(cobra, mov)){
 
         //MOVE COBRA PARA DIREITA
-        case 1:
+        case DIREITA:
             cobra.estatistica = AumentaQtdMovDireita(cobra.estatistica);
             cobra.direcaoAtual = CABECA_DIREITA;
             aux1[0] = cobra.PosCorpo[0][0];
@@ -363,7 +368,7 @@ tCobra MoveCobra(tCobra cobra, char mov, int linhas, int colunas, int xCabeca, i
             break;
 
         //MOVE COBRA PARA CIMA
-        case 2:
+        case CIMA:
             cobra.estatistica = AumentaQtdMovCima(cobra.estatistica);
             cobra.direcaoAtual = CABECA_CIMA;
             aux1[0] = cobra.PosCorpo[0][0];
@@ -380,7 +385,7 @@ tCobra MoveCobra(tCobra cobra, char mov, int linhas, int colunas, int xCabeca, i
             break;
 
         //MOVE COBRA PARA ESQUERDA
-        case 3:
+        case ESQUERDA:
             cobra.estatistica = AumentaQtdMovEsquerda(cobra.estatistica);
             cobra.direcaoAtual = CABECA_ESQUERDA;
             aux1[0] = cobra.PosCorpo[0][0];
@@ -397,7 +402,7 @@ tCobra MoveCobra(tCobra cobra, char mov, int linhas, int colunas, int xCabeca, i
             break;
 
         //MOVE COBRA PARA BAIXO
-        case 4:
+        case BAIXO:
             cobra.estatistica = AumentaQtdMovBaixo(cobra.estatistica);
             cobra.direcaoAtual = CABECA_BAIXO;
             aux1[0] = cobra.PosCorpo[0][0];
@@ -436,46 +441,46 @@ int DirecaoDoMovimento(tCobra cobra, char mov){
     switch (cobra.direcaoAtual){
         case CABECA_DIREITA:
             if (mov == 'c'){
-                return 1; //Movimento para direita
+                return DIREITA; //Movimento para direita
             }
             else if (mov == 'a'){
-                return 2; //Movimento para cima
+                return CIMA; //Movimento para cima
             }
             else if (mov == 'h'){
-                return 4; //Movimento para baixo
+                return BAIXO; //Movimento para baixo
             }
             break;
         case CABECA_ESQUERDA:
             if (mov == 'c'){
-                return 3; //Movimento para esquerda
+                return ESQUERDA; //Movimento para esquerda
             }
             else if (mov == 'a'){
-                return 4; //Movimento para baixo
+                return BAIXO; //Movimento para baixo
             }
             else if (mov == 'h'){
-                return 2; //Movimento para cima
+                return CIMA; //Movimento para cima
             }
             break;
         case CABECA_BAIXO:
             if (mov == 'c'){
-                return 4; //Movimento para baixo
+                return BAIXO; //Movimento para baixo
             }
             else if (mov == 'a'){
-                return 1; //Movimento para direita
+                return DIREITA; //Movimento para direita
             }
             else if (mov == 'h'){
-                return 3; //Movimento para esquerda
+                return ESQUERDA; //Movimento para esquerda
             }
             break;
         case CABECA_CIMA:
             if (mov == 'c'){
-                return 2; //Movimento para cima
+                return CIMA; //Movimento para cima
             }
             else if (mov == 'a'){
-                return 3; //Movimento para esquerda
+                return ESQUERDA; //Movimento para esquerda
             }
             else if (mov == 'h'){
-                return 1; //Movimento para direita
+                return DIREITA; //Movimento para direita
             }
             break;
     }
@@ -660,7 +665,7 @@ tMapa MoveCobraNoMapa(FILE *pFileResumo, tMapa mapa, char mov){
 
     //Verificação de onde a cabeca da cobra estara indo (#, o, *, $, @) 
     switch (DirecaoDoMovimento(mapa.cobra, mov)){
-        case 1:
+        case DIREITA:
             if ((xCabeca + 1) >= mapa.colunas){
                 xCabeca = 0;
             }
@@ -723,7 +728,7 @@ tMapa MoveCobraNoMapa(FILE *pFileResumo, tMapa mapa, char mov){
                     break;
             }
             break;
-        case 2:
+        case CIMA:
             if ((yCabeca - 1) < 0){
                 yCabeca = mapa.linhas - 1;
             }
@@ -786,7 +791,7 @@ tMapa MoveCobraNoMapa(FILE *pFileResumo, tMapa mapa, char mov){
                     break;
             }
             break;
-        case 3:
+        case ESQUERDA:
             if ((xCabeca - 1) < 0){
                 xCabeca = mapa.colunas - 1;
             }
@@ -849,7 +854,7 @@ tMapa MoveCobraNoMapa(FILE *pFileResumo, tMapa mapa, char mov){
                     break;
             }
             break;
-        case 4:
+        case BAIXO:
             if ((yCabeca + 1) >= mapa.linhas){
                 yCabeca = 0;
             }
