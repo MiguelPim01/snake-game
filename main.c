@@ -1000,28 +1000,19 @@ int TemComidaNoMapa(tMapa mapa){
 void PrintaMapaNaSaida(tMapa mapa, char mov){
     int i, j;
 
-    //Funcao tambem tem a opcao de printar na saida padrao (basta apenas tirar o comentario dos printfs)
-
-    //fprintf(pFile, "\n");
-    //fprintf(pFile, "Estado do jogo apos o movimento '%c':\n", mov);
     printf("\n");
     printf("Estado do jogo apos o movimento '%c':\n", mov);
     for (i = 0; i < mapa.linhas; i++){
         for (j = 0; j < mapa.colunas; j++){
-            //fprintf(pFile, "%c", mapa.mapa[i][j]);
             printf("%c", mapa.mapa[i][j]);
         }
-        //fprintf(pFile, "\n");
         printf("\n");
     }
-    //fprintf(pFile, "Pontuacao: %d\n", ObtemPontuacaoDaCobra(mapa.cobra));
     printf("Pontuacao: %d\n", ObtemPontuacaoDaCobra(mapa.cobra));
     if (!CobraEstaViva(mapa.cobra)){
-        //fprintf(pFile, "Game over!\nPontuacao final: %d", ObtemPontuacaoDaCobra(mapa.cobra));
         printf("Game over!\nPontuacao final: %d\n", ObtemPontuacaoDaCobra(mapa.cobra));
     }
     else if (!TemComidaNoMapa(mapa)){
-        //fprintf(pFile, "Voce venceu!\nPontuacao final: %d", ObtemPontuacaoDaCobra(mapa.cobra));
         printf("Voce venceu!\nPontuacao final: %d\n", ObtemPontuacaoDaCobra(mapa.cobra));
     }
 }
