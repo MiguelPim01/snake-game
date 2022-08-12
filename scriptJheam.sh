@@ -1,4 +1,4 @@
-srcFile=main.c
+srcFile=MiguelVieiraMachadoPim.c
 
 gcc --std=gnu89 $srcFile -o main -lm
 
